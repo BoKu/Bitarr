@@ -2,6 +2,8 @@
 
 ## 2.17.0
 
+* Bitarr
+  * `app/preferences` and `app/setPreferences` include `always_sequential_download` (bool) and `always_first_last_pieces` (bool); when true, every added torrent downloads sequentially / first and last pieces first
 * [#24955](https://github.com/qbittorrent/qBittorrent/pull/24955)
   * `search/results` endpoint includes `engineFullName` (string) data as the display name of the engine
 * [#25093](https://github.com/qbittorrent/qBittorrent/pull/25093)

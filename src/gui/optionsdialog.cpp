@@ -581,6 +581,8 @@ void OptionsDialog::loadDownloadsTabOptions()
     m_ui->contentLayoutComboBox->setCurrentIndex(static_cast<int>(session->torrentContentLayout()));
     m_ui->checkAddToQueueTop->setChecked(session->isAddTorrentToQueueTop());
     m_ui->checkAddStopped->setChecked(session->isAddTorrentStopped());
+    m_ui->checkAlwaysSequential->setChecked(session->isAlwaysSequentialDownload());
+    m_ui->checkAlwaysFirstLast->setChecked(session->isAlwaysFirstLastPiecePriority());
 
     m_ui->stopConditionComboBox->setToolTip(
                 u"<html><body><p><b>" + tr("None") + u"</b> - " + tr("No stop condition is set.") + u"</p><p><b>" +
@@ -753,6 +755,8 @@ void OptionsDialog::loadDownloadsTabOptions()
 
     connect(m_ui->checkAddToQueueTop, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
     connect(m_ui->checkAddStopped, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
+    connect(m_ui->checkAlwaysSequential, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
+    connect(m_ui->checkAlwaysFirstLast, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
     connect(m_ui->checkAddStopped, &QAbstractButton::toggled, this, [this](const bool checked)
     {
         m_ui->stopConditionLabel->setEnabled(!checked);
@@ -834,6 +838,8 @@ void OptionsDialog::saveDownloadsTabOptions() const
 
     session->setAddTorrentToQueueTop(m_ui->checkAddToQueueTop->isChecked());
     session->setAddTorrentStopped(addTorrentsStopped());
+    session->setAlwaysSequentialDownload(m_ui->checkAlwaysSequential->isChecked());
+    session->setAlwaysFirstLastPiecePriority(m_ui->checkAlwaysFirstLast->isChecked());
     session->setTorrentStopCondition(m_ui->stopConditionComboBox->currentData().value<BitTorrent::Torrent::StopCondition>());
 
     session->setTorrentFileBackupEnabled(m_ui->backupDirCheckBox->isChecked());

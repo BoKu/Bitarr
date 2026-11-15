@@ -186,6 +186,14 @@
             <label for="dontstartdownloads_checkbox">QBT_TR(Do not start the download automatically)QBT_TR[CONTEXT=OptionsDialog]</label>
         </div>
         <div class="formRow">
+            <input type="checkbox" id="alwaysSequentialCheckbox">
+            <label for="alwaysSequentialCheckbox">QBT_TR(Always download in sequential order)QBT_TR[CONTEXT=OptionsDialog]</label>
+        </div>
+        <div class="formRow">
+            <input type="checkbox" id="alwaysFirstLastCheckbox">
+            <label for="alwaysFirstLastCheckbox">QBT_TR(Always download first and last pieces first)QBT_TR[CONTEXT=OptionsDialog]</label>
+        </div>
+        <div class="formRow">
             <label for="stopConditionSelect">QBT_TR(Torrent stop condition:)QBT_TR[CONTEXT=OptionsDialog]</label>
             <select id="stopConditionSelect">
                 <option value="None">QBT_TR(None)QBT_TR[CONTEXT=OptionsDialog]</option>
@@ -2607,6 +2615,8 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                     document.getElementById("contentlayout_select").getChildren("option")[index].selected = true;
                     document.getElementById("addToTopOfQueueCheckbox").checked = pref.add_to_top_of_queue;
                     document.getElementById("dontstartdownloads_checkbox").checked = pref.add_stopped_enabled;
+                    document.getElementById("alwaysSequentialCheckbox").checked = pref.always_sequential_download;
+                    document.getElementById("alwaysFirstLastCheckbox").checked = pref.always_first_last_pieces;
                     switch (pref.torrent_stop_condition) {
                         case "None":
                             index = 0;
@@ -3058,6 +3068,8 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
             settings["torrent_content_layout"] = document.getElementById("contentlayout_select").getSelected()[0].value;
             settings["add_to_top_of_queue"] = document.getElementById("addToTopOfQueueCheckbox").checked;
             settings["add_stopped_enabled"] = document.getElementById("dontstartdownloads_checkbox").checked;
+            settings["always_sequential_download"] = document.getElementById("alwaysSequentialCheckbox").checked;
+            settings["always_first_last_pieces"] = document.getElementById("alwaysFirstLastCheckbox").checked;
             settings["torrent_stop_condition"] = document.getElementById("stopConditionSelect").getSelected()[0].value;
             settings["merge_trackers"] = document.getElementById("mergeTrackersInput").checked;
             settings["auto_delete_mode"] = !document.getElementById("deleteTorrentFileAfterCheckbox").checked
