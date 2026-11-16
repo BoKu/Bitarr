@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/BoKu/Bitarr/releases/latest"><b>Download the latest release</b></a>
-  (currently <b>v0.2.0</b>)
+  (currently <b>v0.3.0</b>)
 </p>
 
 <p align="center">
@@ -67,7 +67,7 @@ On macOS the binary is `build/qbittorrent.app` (the bundle name is kept for comp
 
 ## Project status
 
-Bitarr is at an early stage (0.2.x). The WebUI is English only. Feedback and bug reports are welcome in [Issues](https://github.com/BoKu/Bitarr/issues); questions go in [Discussions](https://github.com/BoKu/Bitarr/discussions). See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
+Bitarr is at an early stage (0.3.x). The WebUI is English only. Feedback and bug reports are welcome in [Issues](https://github.com/BoKu/Bitarr/issues); questions go in [Discussions](https://github.com/BoKu/Bitarr/discussions). See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
 
 ## Credits and licence
 
