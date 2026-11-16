@@ -308,13 +308,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <widget class="QCheckBox" name="excludeNfoCheckBox">
-                  <property name="text">
-                   <string>Don't download .nfo files</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="3" column="0">
                  <widget class="QCheckBox" name="doNotDeleteTorrentCheckBox">
                   <property name="toolTip">
@@ -322,6 +315,13 @@
                   </property>
                   <property name="text">
                    <string>Do not delete .torrent file</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QCheckBox" name="excludeNfoCheckBox">
+                  <property name="text">
+                   <string>Don't download .nfo files</string>
                   </property>
                  </widget>
                 </item>

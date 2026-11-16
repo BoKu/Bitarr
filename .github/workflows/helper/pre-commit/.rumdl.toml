@@ -9,5 +9,9 @@ disable = [
     "MD082"
 ]
 
+[MD033]
+# The README centres its logo and screenshots, which Markdown cannot do on its own.
+allowed-elements = ["p", "img", "br", "a", "b"]
+
 [MD046]
 style = "fenced"
