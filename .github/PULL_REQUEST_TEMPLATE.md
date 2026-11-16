@@ -1,5 +1,8 @@
-<!--
-MANDATORY Before submitting your work, make sure you have:
-1. Read https://github.com/qbittorrent/qBittorrent/blob/master/CONTRIBUTING.md#opening-a-pull-request
-2. Delete this comment block
--->
+## What does this change?
+
+## How was it tested?
+
+## Checklist
+- [ ] I read [CONTRIBUTING.md](../blob/master/CONTRIBUTING.md)
+- [ ] The change is focused on one topic
+- [ ] User-visible text uses the name "Bitarr" (not "qBittorrent")
