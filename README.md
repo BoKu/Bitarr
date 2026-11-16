@@ -1,59 +1,76 @@
-# Bitarr - A BitTorrent client in Qt
+<p align="center">
+  <img src="src/icons/bitarr.svg" alt="Bitarr logo" width="96">
+</p>
 
-[![GitHub Actions CI Status](https://github.com/BoKu/Bitarr/actions/workflows/ci_ubuntu.yaml/badge.svg)](https://github.com/BoKu/Bitarr/actions)
+<h1 align="center">Bitarr</h1>
 
-Bitarr is a [BitTorrent] client programmed in C++ / Qt that uses
-[libtorrent] (sometimes called libtorrent-rasterbar) by Arvid Norberg.
+<p align="center">
+  A modern BitTorrent client with a phosphor-green look, a built-in web interface and a few extra download options.<br>
+  Based on <a href="https://github.com/qbittorrent/qBittorrent">qBittorrent</a>.
+</p>
 
-It aims to be a good alternative to all other BitTorrent clients
-out there. Bitarr is fast, stable and provides Unicode
-support as well as many features.
+<p align="center">
+  <a href="https://github.com/BoKu/Bitarr/releases/latest"><b>Download the latest release</b></a>
+  (currently <b>v0.1.0</b>)
+</p>
 
-The free [IP to Country Lite database] by [DB-IP] is used for resolving the countries of peers.
-The database is licensed under the [Creative Commons Attribution 4.0 International License].
+<p align="center">
+  <img src="docs/images/desktop.png" alt="Bitarr desktop app" width="49%">
+  <img src="docs/images/webui.png" alt="Bitarr WebUI" width="49%">
+</p>
 
-[BitTorrent]: https://en.wikipedia.org/wiki/BitTorrent
-[Creative Commons Attribution 4.0 International License]: https://creativecommons.org/licenses/by/4.0/
-[DB-IP]: https://db-ip.com/
-[IP to Country Lite database]: https://db-ip.com/db/download/ip-to-country-lite
-[libtorrent]: https://libtorrent.org/
+## Features
 
-## Installation
+- **Modern desktop app (C++/Qt)** with a dark green theme, a single Sonarr/Radarr-style sidebar (pages plus Status, Categories and Tags filters), a redrawn icon set and readable progress labels.
+- **New built-in WebUI** in plain HTML, CSS and JavaScript (no build step, no libraries). Live transfers, filters, add/resume/pause/remove, a details panel (General, Files, Trackers, Peers), settings, and a phone-friendly layout. It uses the standard `/api/v2` WebAPI.
+- **Extra download options**, in Preferences and in the WebUI settings:
+  - Always download in sequential order
+  - Always download first and last pieces first
+  - Always never download `.nfo` files
+- **"Don't download .nfo files"** option in the add torrent/magnet dialog (desktop and WebUI). `.nfo` files are shown as skipped in the file list, case-insensitively.
+- **Standalone**: its own name, settings and profile, so it can run next to an installed qBittorrent.
+- Everything you expect from qBittorrent underneath: libtorrent-rasterbar, DHT/PeX/LSD, magnet links, RSS, search plugins, queueing, speed limits and categories/tags.
 
-Refer to the [INSTALL] file.
+## Install
 
-[INSTALL]: INSTALL
+Download the zip for your platform from the [Releases page](https://github.com/BoKu/Bitarr/releases).
 
-## License
+| Platform | Status |
+| --- | --- |
+| macOS (Intel) | `Bitarr-<version>-macOS-x86_64.zip` |
+| macOS (Apple Silicon) | not available yet (build from source) |
+| Windows, Linux | not available yet (build from source) |
 
-Refer to the [COPYING] file.
+The macOS app is **not signed or notarised**. The first time, right-click `Bitarr.app` and choose **Open**, or run:
 
-[COPYING]: COPYING
+```sh
+xattr -dr com.apple.quarantine /path/to/Bitarr.app
+```
 
-## PGP Public Key
+Bitarr checks this repository for newer releases from **Help > Check for updates**.
 
-Starting from v3.3.4 all source tarballs and binaries are signed. \
-The key currently used is 4096R/[5B7CC9A2](https://pgp.mit.edu/pks/lookup?op=get&search=0x6E4A2D025B7CC9A2) with fingerprint `D8F3DA77AAC6741053599C136E4A2D025B7CC9A2`. \
-You can also [download it](https://github.com/qbittorrent/qBittorrent/raw/master/5B7CC9A2.asc). \
-**PREVIOUSLY** the following key was used to sign the v3.3.4 source tarballs and v3.3.4 Windows installer **only**: 4096R/[520EC6F6](https://pgp.mit.edu/pks/lookup?op=get&search=0xA1ACCAE4520EC6F6) with fingerprint `F4A5FD201B117B1C2AB590E2A1ACCAE4520EC6F6`.
+## Using the WebUI
 
-## Misc
+Open **Preferences > WebUI**, enable it, set a username and password, then browse to `http://localhost:8080/` (or the port you chose). Without a username and password the WebUI will not start.
 
-For more information please visit:
-<https://github.com/BoKu/Bitarr>
+## Building
 
-Check out our wiki at:
-<https://github.com/BoKu/Bitarr/wiki>
+Requirements: a C++20 compiler, CMake 3.16 or newer, Ninja (recommended), Qt 6.6 or newer (Qt 6.10 or newer is recommended on macOS 26), libtorrent-rasterbar 2.0.10 or newer, Boost 1.76 or newer, OpenSSL 3.0.2 or newer and zlib.
 
-Use the forum for troubleshooting before reporting bugs:
-<https://github.com/BoKu/Bitarr/discussions>
+```sh
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+      -DGUI=ON -DWEBUI=ON -DCMAKE_PREFIX_PATH=/path/to/qt
+cmake --build build
+```
 
-Please report any bug (or feature request) to:
-<https://github.com/BoKu/Bitarr/issues>
+On macOS the binary is `build/qbittorrent.app` (the bundle name is kept for compatibility). To produce a self-contained app, run Qt's `macdeployqt` on a copy of it. More options are described in [INSTALL](INSTALL).
 
-Official IRC channel:
-[#qbittorrent on irc.libera.chat](ircs://irc.libera.chat:6697/qbittorrent)
+## Project status
 
------------------------------------------------------
+Bitarr is at an early stage (0.1.x). The WebUI does not have Search, RSS, Log or Statistics pages yet and is English only. Feedback and bug reports are welcome in [Issues](https://github.com/BoKu/Bitarr/issues); questions go in [Discussions](https://github.com/BoKu/Bitarr/discussions). See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
 
-sledgehammer999 \<<sledgehammer999@qbittorrent.org>\>
+## Credits and licence
+
+Bitarr is a custom application based on [qBittorrent](https://github.com/qbittorrent/qBittorrent), created by Christophe Dumez and maintained by the qBittorrent project and its contributors. Their work is the foundation of this program; see [AUTHORS](AUTHORS).
+
+Bitarr is distributed under the GNU General Public License, version 2 or (at your option) any later version, with the OpenSSL exception described in [COPYING](COPYING). It bundles Qt (LGPL v3), libtorrent-rasterbar (BSD), Boost and OpenSSL in its binary releases.
