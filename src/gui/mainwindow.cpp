@@ -495,7 +495,7 @@ MainWindow::MainWindow(IGUIApplication *app, const WindowState initialState, con
                 hide();
                 if (!pref->minimizeToTrayNotified())
                 {
-                    app->desktopIntegration()->showNotification(tr("qBittorrent is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+                    app->desktopIntegration()->showNotification(tr("Bitarr is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
                     pref->setMinimizeToTrayNotified(true);
                 }
             }
@@ -594,7 +594,7 @@ void MainWindow::setTitleSuffix(const QString &suffix)
 {
     const auto emDash = QChar(0x2014);
     const QString separator = u' ' + emDash + u' ';
-    m_windowTitle = QStringLiteral("qBittorrent " QBT_VERSION)
+    m_windowTitle = QStringLiteral("Bitarr " QBT_VERSION)
         + (!suffix.isEmpty() ? (separator + suffix) : QString());
 
     refreshWindowTitle();
@@ -837,7 +837,7 @@ void MainWindow::updateNbTorrents()
 
 void MainWindow::on_actionDocumentation_triggered() const
 {
-    QDesktopServices::openUrl(QUrl(u"https://wiki.qbittorrent.org"_s));
+    QDesktopServices::openUrl(QUrl(u"https://github.com/BoKu/Bitarr/wiki"_s));
 }
 
 void MainWindow::tabChanged([[maybe_unused]] const int newTab)
@@ -1091,7 +1091,7 @@ void MainWindow::notifyOfUpdate(const QString &)
 {
     // Show restart message
     m_statusBar->showRestartRequired();
-    LogMsg(tr("qBittorrent was just updated and needs to be restarted for the changes to be effective.")
+    LogMsg(tr("Bitarr was just updated and needs to be restarted for the changes to be effective.")
                                    , Log::CRITICAL);
     // Delete the executable watcher
     delete m_executableWatcher;
@@ -1227,7 +1227,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
         QMetaObject::invokeMethod(this, &QWidget::hide, Qt::QueuedConnection);
         if (!pref->closeToTrayNotified())
         {
-            app()->desktopIntegration()->showNotification(tr("qBittorrent is closed to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+            app()->desktopIntegration()->showNotification(tr("Bitarr is closed to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
             pref->setCloseToTrayNotified(true);
         }
         return;
@@ -1245,9 +1245,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
         {
             if (!isVisible())
                 show();
-            QMessageBox confirmBox(QMessageBox::Question, tr("Exiting qBittorrent"),
+            QMessageBox confirmBox(QMessageBox::Question, tr("Exiting Bitarr"),
                                    // Split it because the last sentence is used in the WebUI
-                                   tr("Some files are currently transferring.") + u'\n' + tr("Are you sure you want to quit qBittorrent?"),
+                                   tr("Some files are currently transferring.") + u'\n' + tr("Are you sure you want to quit Bitarr?"),
                                    QMessageBox::NoButton, this);
             QPushButton *noBtn = confirmBox.addButton(tr("&No"), QMessageBox::NoRole);
             confirmBox.addButton(tr("&Yes"), QMessageBox::YesRole);
@@ -1320,7 +1320,7 @@ bool MainWindow::event(QEvent *e)
                     QMetaObject::invokeMethod(this, &QWidget::hide, Qt::QueuedConnection);
                     if (!pref->minimizeToTrayNotified())
                     {
-                        app()->desktopIntegration()->showNotification(tr("qBittorrent is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+                        app()->desktopIntegration()->showNotification(tr("Bitarr is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
                         pref->setMinimizeToTrayNotified(true);
                     }
                     return true;
@@ -1721,8 +1721,8 @@ void MainWindow::handleUpdateCheckFinished(ProgramUpdater *updater, const bool i
     {
         const QString msg {tr("A new version is available.") + u"<br/>"
             + tr("Do you want to download %1?").arg(newVersion.toString()) + u"<br/><br/>"
-            + u"<a href=\"https://www.qbittorrent.org/news\">%1</a>"_s.arg(tr("Open changelog..."))};
-        auto *msgBox = new QMessageBox {QMessageBox::Question, tr("qBittorrent Update Available"), msg
+            + u"<a href=\"https://github.com/BoKu/Bitarr/releases\">%1</a>"_s.arg(tr("Open changelog..."))};
+        auto *msgBox = new QMessageBox {QMessageBox::Question, tr("Bitarr Update Available"), msg
             , (QMessageBox::Yes | QMessageBox::No), this};
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
         msgBox->setAttribute(Qt::WA_ShowWithoutActivating);
@@ -1766,7 +1766,7 @@ void MainWindow::toggleAlternativeSpeeds()
 
 void MainWindow::on_actionDonateMoney_triggered()
 {
-    QDesktopServices::openUrl(QUrl(u"https://www.qbittorrent.org/donate"_s));
+    QDesktopServices::openUrl(QUrl(u"https://github.com/BoKu/Bitarr"_s));
 }
 
 void MainWindow::showConnectionSettings()

@@ -258,7 +258,7 @@ void TorrentCreator::run()
             sendProgressSignal(LT::toUnderlyingType(n), newTorrent.num_pieces());
         });
 
-        // Set qBittorrent as creator and add user comment to
+        // Set Bitarr as creator and add user comment to
         // torrent_info structure
         newTorrent.set_creator("qBittorrent " QBT_VERSION);
         newTorrent.set_comment(m_params.comment.toUtf8().constData());

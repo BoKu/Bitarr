@@ -816,7 +816,7 @@ void AddNewTorrentDialog::setupTreeview()
         lt::add_torrent_params p = torrentDescr.ltAddTorrentParams();
         if (p.file_priorities.empty())
         {
-            // Use qBittorrent default priority rather than libtorrent's (4)
+            // Use Bitarr default priority rather than libtorrent's (4)
             addTorrentParams.filePriorities.resize(torrentInfo.filesCount(), BitTorrent::DownloadPriority::Normal);
         }
         else

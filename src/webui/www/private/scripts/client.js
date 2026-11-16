@@ -142,7 +142,7 @@ window.qBittorrent.Client ??= (() => {
         let suffix = window.qBittorrent.Cache.preferences.get()["app_instance_name"] || "";
         if (suffix.length > 0)
             suffix = ` ${emDash} ${suffix}`;
-        const title = `qBittorrent ${qbtVersion} QBT_TR(WebUI)QBT_TR[CONTEXT=OptionsDialog]${suffix}`;
+        const title = `Bitarr ${qbtVersion} QBT_TR(WebUI)QBT_TR[CONTEXT=OptionsDialog]${suffix}`;
         return title;
     };
 
@@ -1216,7 +1216,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
                 (error) => {
                     const errorDiv = document.getElementById("error_div");
                     if (errorDiv)
-                        errorDiv.textContent = "QBT_TR(qBittorrent client is not reachable)QBT_TR[CONTEXT=HttpServer]";
+                        errorDiv.textContent = "QBT_TR(Bitarr client is not reachable)QBT_TR[CONTEXT=HttpServer]";
                     syncRequestInProgress = false;
                     syncData(document.hidden
                         ? (window.qBittorrent.Cache.preferences.get().web_ui_session_timeout * 1000) / 2

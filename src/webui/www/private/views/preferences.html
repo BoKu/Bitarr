@@ -1400,7 +1400,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                         <label for="appInstanceName">QBT_TR(Customize application instance name:)QBT_TR[CONTEXT=OptionsDialog]</label>
                     </td>
                     <td>
-                        <input type="text" id="appInstanceName" style="width: 15em;" title="QBT_TR(It appends the text to the window title to help distinguish qBittorrent instances)QBT_TR[CONTEXT=OptionsDialog]">
+                        <input type="text" id="appInstanceName" style="width: 15em;" title="QBT_TR(It appends the text to the window title to help distinguish Bitarr instances)QBT_TR[CONTEXT=OptionsDialog]">
                     </td>
                 </tr>
                 <tr>
@@ -2264,7 +2264,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                 })
                 .then((response) => {
                     if (!response.ok) {
-                        showNotification("QBT_TR(Could not contact qBittorrent.)QBT_TR[CONTEXT=OptionsDialog]", 300, 60, 5000);
+                        showNotification("QBT_TR(Could not contact Bitarr.)QBT_TR[CONTEXT=OptionsDialog]", 300, 60, 5000);
                         return;
                     }
 
@@ -2471,7 +2471,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                 })
                 .then(async (response) => {
                     if (!response.ok) {
-                        alert("Could not contact qBittorrent");
+                        alert("Could not contact Bitarr");
                         return;
                     }
 
@@ -2504,7 +2504,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                 })
                 .then(async (response) => {
                     if (!response.ok) {
-                        alert("Could not contact qBittorrent");
+                        alert("Could not contact Bitarr");
                         return;
                     }
 
@@ -2934,7 +2934,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                     updateDynDnsSettings();
 
                     // Advanced settings
-                    // qBittorrent section
+                    // Bitarr section
                     document.getElementById("resumeDataStorageType").value = pref.resume_data_storage_type;
                     document.getElementById("torrentContentRemoveOption").value = pref.torrent_content_remove_option;
                     document.getElementById("memoryWorkingSetLimit").value = pref.memory_working_set_limit;
@@ -3020,7 +3020,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                     document.getElementById("i2pOutboundLengthVariance").value = pref.i2p_outbound_length_variance;
                 }).catch((error) => {
                     console.error(error);
-                    alert("QBT_TR(Unable to load program preferences, qBittorrent is probably unreachable.)QBT_TR[CONTEXT=HttpServer]");
+                    alert("QBT_TR(Unable to load program preferences, Bitarr is probably unreachable.)QBT_TR[CONTEXT=HttpServer]");
                 });
         };
 
@@ -3443,7 +3443,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
             settings["dyndns_password"] = document.getElementById("dyndns_password_text").value;
 
             // Update advanced settings
-            // qBittorrent section
+            // Bitarr section
             settings["resume_data_storage_type"] = document.getElementById("resumeDataStorageType").value;
             settings["torrent_content_remove_option"] = document.getElementById("torrentContentRemoveOption").value;
             settings["memory_working_set_limit"] = Number(document.getElementById("memoryWorkingSetLimit").value);
@@ -3597,7 +3597,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                     if (error.name === "ServerError")
                         alert(`QBT_TR(Error:)QBT_TR[CONTEXT=HttpServer] ${error.message}`);
                     else
-                        alert("QBT_TR(Unable to save preferences, qBittorrent is probably unreachable.)QBT_TR[CONTEXT=HttpServer]");
+                        alert("QBT_TR(Unable to save preferences, Bitarr is probably unreachable.)QBT_TR[CONTEXT=HttpServer]");
                 }
             });
         };
@@ -3735,7 +3735,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.)QBT_TR[CONTEXT=OptionsD
                 : "QBT_TR(Generate API key)QBT_TR[CONTEXT=OptionsDialog]";
             const message = hasKey
                 ? "QBT_TR(Rotate this API key? The current key will immediately stop working and a new key will be generated.)QBT_TR[CONTEXT=confirmRotateAPIKeyDialog]"
-                : "QBT_TR(Generate an API key? This key can be used to interact with qBittorrent's API.)QBT_TR[CONTEXT=confirmRotateAPIKeyDialog]";
+                : "QBT_TR(Generate an API key? This key can be used to interact with Bitarr's API.)QBT_TR[CONTEXT=confirmRotateAPIKeyDialog]";
 
             new MochaUI.Modal({
                 ...window.qBittorrent.Dialog.baseModalOptions,

@@ -1,6 +1,6 @@
 # qBittorrent WebUI
 
-[![GitHub Actions CI Status](https://github.com/qbittorrent/qBittorrent/actions/workflows/ci_webui.yaml/badge.svg)](https://github.com/qbittorrent/qBittorrent/actions/workflows/ci_webui.yaml)
+[![GitHub Actions CI Status](https://github.com/BoKu/Bitarr/actions/workflows/ci_webui.yaml/badge.svg)](https://github.com/BoKu/Bitarr/actions/workflows/ci_webui.yaml)
 
 ## Development Workflow
 

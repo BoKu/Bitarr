@@ -211,7 +211,7 @@ void DNSUpdater::processIPUpdateReply(const QString &reply)
 
     if (code == u"badagent")
     {
-        LogMsg(tr("Dynamic DNS error: qBittorrent was blacklisted by the service, please submit a bug report at https://bugs.qbittorrent.org."),
+        LogMsg(tr("Dynamic DNS error: qBittorrent was blacklisted by the service, please submit a bug report at https://github.com/BoKu/Bitarr/issues."),
                            Log::CRITICAL);
         m_state = FATAL;
         return;
@@ -219,7 +219,7 @@ void DNSUpdater::processIPUpdateReply(const QString &reply)
 
     if (code == u"!donator")
     {
-        LogMsg(tr("Dynamic DNS error: %1 was returned by the service, please submit a bug report at https://bugs.qbittorrent.org.").arg(u"!donator"_s),
+        LogMsg(tr("Dynamic DNS error: %1 was returned by the service, please submit a bug report at https://github.com/BoKu/Bitarr/issues.").arg(u"!donator"_s),
                            Log::CRITICAL);
         m_state = FATAL;
         return;

@@ -1043,7 +1043,7 @@ void AppController::setPreferencesAction()
         RSS::AutoDownloader::instance()->setSmartEpisodeFilters(it.value().toString().split(u'\n'));
 
     // Advanced settings
-    // qBittorrent preferences
+    // Bitarr preferences
     // Resume data storage type
     if (hasKey(u"resume_data_storage_type"_s))
         session->setResumeDataStorageType(Utils::String::toEnum(it.value().toString(), BitTorrent::ResumeDataStorageType::Legacy));

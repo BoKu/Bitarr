@@ -1404,7 +1404,7 @@ const initializeWindows = () => {
         new MochaUI.Window({
             id: id,
             icon: "images/qbittorrent-tray.svg",
-            title: "QBT_TR(About qBittorrent)QBT_TR[CONTEXT=AboutDialog]",
+            title: "QBT_TR(About Bitarr)QBT_TR[CONTEXT=AboutDialog]",
             loadMethod: "xhr",
             contentURL: "views/about.html?v=${CACHEID}",
             require: {
@@ -1440,7 +1440,7 @@ const initializeWindows = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (confirm("QBT_TR(Are you sure you want to quit qBittorrent?)QBT_TR[CONTEXT=MainWindow]")) {
+        if (confirm("QBT_TR(Are you sure you want to quit Bitarr?)QBT_TR[CONTEXT=MainWindow]")) {
             fetch("api/v2/app/shutdown", {
                     method: "POST"
                 })

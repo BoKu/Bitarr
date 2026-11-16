@@ -69,93 +69,51 @@ namespace
 
 void ProgramUpdater::checkForUpdates()
 {
-    // Don't change this User-Agent. In case our updater goes haywire,
-    // the filehost can identify it and contact us.
-    const auto USER_AGENT = QStringLiteral("qBittorrent/" QBT_VERSION_2 " ProgramUpdater (www.qbittorrent.org)");
-    const auto QBT_MAIN_URL = u"https://www.qbittorrent.org/versions.json"_s;
-    const auto QBT_BACKUP_URL = u"https://qbittorrent.github.io/qBittorrent-website/versions.json"_s;
+    // GitHub's API rejects requests without a User-Agent; the download manager supplies a default one.
+    const auto LATEST_RELEASE_URL = u"https://api.github.com/repos/BoKu/Bitarr/releases/latest"_s;
 
     Net::DownloadManager *netManager = Net::DownloadManager::instance();
     const bool useProxy = Preferences::instance()->useProxyForGeneralPurposes();
 
-    m_pendingRequestCount = 2;
-    // don't use the custom user agent for the following requests, disguise as a normal browser instead
-    netManager->download(Net::DownloadRequest(QBT_MAIN_URL), useProxy, this, [this](const Net::DownloadResult &result)
+    netManager->download(Net::DownloadRequest(LATEST_RELEASE_URL), useProxy, this, [this](const Net::DownloadResult &result)
     {
-        fallbackDownloadFinished(result, m_qbtMainVersion);
-    });
-    netManager->download(Net::DownloadRequest(QBT_BACKUP_URL), useProxy, this, [this](const Net::DownloadResult &result)
-    {
-        fallbackDownloadFinished(result, m_qbtBackupVersion);
+        updateInfoDownloadFinished(result);
     });
 }
 
 ProgramUpdater::Version ProgramUpdater::getNewVersion() const
 {
-    switch (getLatestRemoteSource())
-    {
-    case RemoteSource::QbtMain:
-        return m_qbtMainVersion;
-    case RemoteSource::QbtBackup:
-        return m_qbtBackupVersion;
-    }
-    Q_UNREACHABLE();
+    return m_newVersion;
 }
 
-void ProgramUpdater::fallbackDownloadFinished(const Net::DownloadResult &result, Version &version)
+void ProgramUpdater::updateInfoDownloadFinished(const Net::DownloadResult &result)
 {
-    version = {};
+    m_newVersion = {};
 
     if (result.status != Net::DownloadStatus::Success)
     {
         LogMsg(tr("Failed to download the program update info. URL: \"%1\". Error: \"%2\"").arg(result.url, result.errorString) , Log::WARNING);
-        handleFinishedRequest();
+        emit updateCheckFinished();
         return;
     }
 
+    // "tag_name" is the release tag, e.g. "v0.1.0"
     const auto json = QJsonDocument::fromJson(result.data);
-
-#if defined(Q_OS_MACOS)
-    const QString platformKey = u"macos"_s;
-#elif defined(Q_OS_WIN)
-    const QString platformKey = u"win"_s;
-#endif
-
-    if (const QJsonValue verJSON = json[platformKey][u"version"_s]; verJSON.isString())
+    if (const QJsonValue tagJSON = json[u"tag_name"_s]; tagJSON.isString())
     {
-        const Version tmpVer {verJSON.toString()};
+        QString tag = tagJSON.toString();
+        if (tag.startsWith(u'v', Qt::CaseInsensitive))
+            tag.remove(0, 1);
+
+        const Version tmpVer {tag};
         if (isVersionMoreRecent(tmpVer))
-            version = tmpVer;
+            m_newVersion = tmpVer;
     }
 
-    handleFinishedRequest();
+    emit updateCheckFinished();
 }
 
 bool ProgramUpdater::updateProgram() const
 {
-    switch (getLatestRemoteSource())
-    {
-    case RemoteSource::QbtMain:
-        return QDesktopServices::openUrl(u"https://www.qbittorrent.org/download"_s);
-    case RemoteSource::QbtBackup:
-        return QDesktopServices::openUrl(u"https://qbittorrent.github.io/qBittorrent-website/download"_s);
-    }
-    Q_UNREACHABLE();
-}
-
-void ProgramUpdater::handleFinishedRequest()
-{
-    --m_pendingRequestCount;
-    if (m_pendingRequestCount == 0)
-        emit updateCheckFinished();
-}
-
-ProgramUpdater::RemoteSource ProgramUpdater::getLatestRemoteSource() const
-{
-    const Version max = std::max({m_qbtMainVersion, m_qbtBackupVersion});
-    if (max == m_qbtMainVersion)
-        return RemoteSource::QbtMain;
-    if (max == m_qbtBackupVersion)
-        return RemoteSource::QbtBackup;
-    Q_UNREACHABLE();
+    return QDesktopServices::openUrl(u"https://github.com/BoKu/Bitarr/releases"_s);
 }

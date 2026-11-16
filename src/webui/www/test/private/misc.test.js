@@ -210,7 +210,7 @@ test("Test formatDate() - Fallback Behavior", () => {
     const originalParent = window.parent;
 
     window.parent = {
-        qBittorrent: {
+        Bitarr: {
             ClientData: {
                 get: mockGet
             }

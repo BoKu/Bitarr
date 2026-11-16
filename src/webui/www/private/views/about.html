@@ -1,8 +1,8 @@
 <div id="aboutAboutContent" class="aboutTabContent">
-    <img src="images/mascot.png" style="float: left;" alt="QBT_TR(qBittorrent Mascot)QBT_TR[CONTEXT=AboutDialog]">
+    <img src="images/mascot.png" style="float: left;" alt="QBT_TR(Bitarr Mascot)QBT_TR[CONTEXT=AboutDialog]">
     <div>
-        <img src="images/qbittorrent-tray.svg" style="float: left; height: 1.5em;" alt="QBT_TR(qBittorrent icon)QBT_TR[CONTEXT=AboutDialog]">
-        <h3 id="qbittorrentVersion">qBittorrent</h3>
+        <img src="images/qbittorrent-tray.svg" style="float: left; height: 1.5em;" alt="QBT_TR(Bitarr icon)QBT_TR[CONTEXT=AboutDialog]">
+        <h3 id="qbittorrentVersion">Bitarr</h3>
     </div>
     <p>QBT_TR(An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar.)QBT_TR[CONTEXT=AboutDialog]</p>
     <p>Copyright © 2006-2026 The qBittorrent project</p>
@@ -10,15 +10,15 @@
         <tbody>
             <tr>
                 <td>QBT_TR(Home Page:)QBT_TR[CONTEXT=AboutDialog]</td>
-                <td><a href="https://www.qbittorrent.org" target="_blank">https://www.qbittorrent.org</a></td>
+                <td><a href="https://github.com/BoKu/Bitarr" target="_blank">https://github.com/BoKu/Bitarr</a></td>
             </tr>
             <tr>
                 <td>QBT_TR(Bug Tracker:)QBT_TR[CONTEXT=AboutDialog]</td>
-                <td><a href="https://bugs.qbittorrent.org" target="_blank">https://bugs.qbittorrent.org</a></td>
+                <td><a href="https://github.com/BoKu/Bitarr/issues" target="_blank">https://github.com/BoKu/Bitarr/issues</a></td>
             </tr>
             <tr>
                 <td>QBT_TR(Forum:)QBT_TR[CONTEXT=AboutDialog]</td>
-                <td><a href="https://forum.qbittorrent.org" target="_blank">https://forum.qbittorrent.org</a></td>
+                <td><a href="https://github.com/BoKu/Bitarr/discussions" target="_blank">https://github.com/BoKu/Bitarr/discussions</a></td>
             </tr>
         </tbody>
     </table>
@@ -64,7 +64,7 @@
 
 <div id="aboutSpecialThanksContent" class="aboutTabContent invisible">
     <p>I would first like to thank sourceforge.net for hosting qBittorrent project and for their support.</p>
-    <p>I am pleased that people from all over the world are contributing to qBittorrent: Ishan Arora (India), Arnaud Demaizière (France) and Stephanos Antaris (Greece). Their help is greatly appreciated</p>
+    <p>I am pleased that people from all over the world are contributing to Bitarr: Ishan Arora (India), Arnaud Demaizière (France) and Stephanos Antaris (Greece). Their help is greatly appreciated</p>
     <p>I also want to thank Στέφανος Αντάρης (santaris@csd.auth.gr) and Mirco Chinelli (infinity89@fastwebmail.it) for working on Mac OS X packaging.</p>
     <p>I am grateful to Peter Koeleman (peter@qbittorrent.org) and Mohammad Dib (mdib@qbittorrent.org) for working on qBittorrent port to Windows.</p>
     <p>Thanks a lot to our graphist Mateusz Toboła (tobejodok@qbittorrent.org) for his great work.</p>
@@ -72,7 +72,7 @@
 </div>
 
 <div id="aboutTranslatorsContent" class="aboutTabContent invisible">
-    <p>I would like to thank the people who volunteered to translate qBittorrent.<br>
+    <p>I would like to thank the people who volunteered to translate Bitarr.<br>
         Most of them translated via <a target="_blank" href="https://explore.transifex.com/sledgehammer999/qbittorrent/">Transifex</a> and some of them are mentioned below:<br>
         (the list might not be up to date)
     </p>
@@ -116,11 +116,11 @@
         <li><u>Ukrainian:</u> Oleh Prypin (blaxpirit@gmail.com)</li>
         <li><u>Vietnamese:</u> Anh Phan ppanhh(Transifex)</li>
     </ul>
-    <p>Please contact me if you would like to translate qBittorrent into your own language.</p>
+    <p>Please contact me if you would like to translate Bitarr into your own language.</p>
 </div>
 
 <div id="aboutLicenseContent" class="aboutTabContent invisible">
-    <p>The qBittorrent source code is licensed under the GNU General Public License, version 2 or (at your option) any later version (GPLv2+).
+    <p>The Bitarr source code is licensed under the GNU General Public License, version 2 or (at your option) any later version (GPLv2+).
         However, this binary distribution is licensed under GNU General Public License, version 3 or (at your option) any later version (GPLv3+),
         because it contains GPLv3+ assets (eg images). In both cases, the following special exception is added:</p>
     <p>
@@ -820,7 +820,7 @@
 </div>
 
 <div id="aboutSoftwareUsedContent" class="aboutTabContent invisible">
-    <p>QBT_TR(qBittorrent was built with the following libraries:)QBT_TR[CONTEXT=AboutDialog]</p>
+    <p>QBT_TR(Bitarr was built with the following libraries:)QBT_TR[CONTEXT=AboutDialog]</p>
     <table style="margin: 0 auto;">
         <tbody>
             <tr>
@@ -855,7 +855,7 @@
         const qbtVersion = window.parent.qBittorrent.Cache.qbtVersion.get();
         const buildInfo = window.parent.qBittorrent.Cache.buildInfo.get();
 
-        document.getElementById("qbittorrentVersion").textContent = `qBittorrent ${qbtVersion} QBT_TR(WebUI)QBT_TR[CONTEXT=OptionsDialog]`;
+        document.getElementById("qbittorrentVersion").textContent = `Bitarr ${qbtVersion} QBT_TR(WebUI)QBT_TR[CONTEXT=OptionsDialog]`;
         document.getElementById("qtVersion").textContent = buildInfo.qt;
         document.getElementById("libtorrentVersion").textContent = buildInfo.libtorrent;
         document.getElementById("boostVersion").textContent = buildInfo.boost;

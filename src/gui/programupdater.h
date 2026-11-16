@@ -57,19 +57,8 @@ signals:
     void updateCheckFinished();
 
 private slots:
-    void fallbackDownloadFinished(const Net::DownloadResult &result, Version &version);
+    void updateInfoDownloadFinished(const Net::DownloadResult &result);
 
 private:
-    enum class RemoteSource
-    {
-        QbtMain,
-        QbtBackup
-    };
-
-    void handleFinishedRequest();
-    RemoteSource getLatestRemoteSource() const;
-
-    int m_pendingRequestCount = 0;
-    Version m_qbtMainVersion;
-    Version m_qbtBackupVersion;
+    Version m_newVersion;
 };

@@ -145,7 +145,7 @@ bool LocalPeer::isClient()
     {
         // Since v5.2 `QLockFile` is adopted as part of "single instance" feature implementation.
         // It may have conflict with old locking mechanism in case there is stale lockfile
-        // created by previous qBittorrent version exist when new one is starting.
+        // created by previous Bitarr version exist when new one is starting.
         // The following code is intended to prevent this issue by removing stale lockfile.
         if (m_lockFile.error() != QLockFile::LockFailedError)
             return true;
@@ -154,7 +154,7 @@ bool LocalPeer::isClient()
         {
             // A lockfile that names our own PID is stale: we do not hold the lock, and no other
             // process in our PID namespace can have our PID. `QLockFile` keeps it anyway, because
-            // that PID is alive (it is us). It happens after an unclean exit when qBittorrent starts
+            // that PID is alive (it is us). It happens after an unclean exit when Bitarr starts
             // as the same PID every time: in a container restarted with the same hostname (PID 1),
             // or in Flatpak (PID 2).
             if ((lockInfo->hostid == QSysInfo::machineUniqueId())

@@ -4,13 +4,13 @@
   <id>org.qbittorrent.qBittorrent</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later and OpenSSL</project_license>
-  <name>qBittorrent</name>
+  <name>Bitarr</name>
   <summary>An open-source Bittorrent client</summary>
   <description>
     <p>
       The qBittorrent project aims to provide an open-source software alternative to µTorrent.
-      Additionally, qBittorrent runs and provides the same features on all major platforms (FreeBSD, Linux, macOS, OS/2, Windows).
-      qBittorrent is based on the Qt toolkit and libtorrent-rasterbar library.
+      Additionally, Bitarr runs and provides the same features on all major platforms (FreeBSD, Linux, macOS, OS/2, Windows).
+      Bitarr is based on the Qt toolkit and libtorrent-rasterbar library.
     </p>
     <ul>
       <li>Polished µTorrent-like User Interface</li>
@@ -50,18 +50,18 @@
   </screenshots>
   <update_contact>sledgehammer999@qbittorrent.org</update_contact>
   <developer id="org.qbittorrent">
-    <name>The qBittorrent Project</name>
+    <name>The Bitarr Project</name>
   </developer>
-  <url type="homepage">https://www.qbittorrent.org/</url>
-  <url type="bugtracker">https://bugs.qbittorrent.org/</url>
-  <url type="faq">https://wiki.qbittorrent.org/Frequently-Asked-Questions</url>
-  <url type="help">https://forum.qbittorrent.org/</url>
-  <url type="donation">https://www.qbittorrent.org/donate</url>
-  <url type="translate">https://wiki.qbittorrent.org/How-to-translate-qBittorrent</url>
-  <url type="vcs-browser">https://github.com/qbittorrent/qBittorrent</url>
-  <url type="contribute">https://github.com/qbittorrent/qBittorrent/blob/master/CONTRIBUTING.md</url>
+  <url type="homepage">https://github.com/BoKu/Bitarr</url>
+  <url type="bugtracker">https://github.com/BoKu/Bitarr/issues</url>
+  <url type="faq">https://github.com/BoKu/Bitarr/wiki</url>
+  <url type="help">https://github.com/BoKu/Bitarr/discussions</url>
+  <url type="donation">https://github.com/BoKu/Bitarr</url>
+  <url type="translate">https://github.com/BoKu/Bitarr</url>
+  <url type="vcs-browser">https://github.com/BoKu/Bitarr</url>
+  <url type="contribute">https://github.com/BoKu/Bitarr/blob/master/CONTRIBUTING.md</url>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release version="5.4.0~alpha1" date="2026-09-28"/>
+    <release version="0.1.0" date="2026-11-16"/>
   </releases>
 </component>

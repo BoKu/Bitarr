@@ -3056,14 +3056,14 @@ bool SessionImpl::addTorrent_impl(const TorrentDescriptor &torrentDescr, const A
         const int internalFilesCount = internalFiles.num_files(); // including .pad files
         if (!filePriorities.isEmpty())
         {
-            // Use qBittorrent default priority rather than libtorrent's (4)
+            // Use Bitarr default priority rather than libtorrent's (4)
             p.file_priorities = std::vector(internalFilesCount, LT::toNative(DownloadPriority::Normal));
             for (qsizetype i = 0; i < filePriorities.size(); ++i)
                 p.file_priorities[LT::toUnderlyingType(nativeIndexes[i])] = LT::toNative(filePriorities[i]);
         }
         else if (p.file_priorities.empty())
         {
-            // Use qBittorrent default priority rather than libtorrent's (4)
+            // Use Bitarr default priority rather than libtorrent's (4)
             p.file_priorities = std::vector(internalFilesCount, LT::toNative(DownloadPriority::Normal));
         }
 

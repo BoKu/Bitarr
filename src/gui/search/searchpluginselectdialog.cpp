@@ -406,7 +406,7 @@ void SearchPluginSelectDialog::askForLocalPlugin()
 {
     const QStringList pathsList = QFileDialog::getOpenFileNames(
                 nullptr, tr("Select search plugins"), QDir::homePath(),
-                (tr("qBittorrent search plugin") + u" (*.py)"));
+                (tr("Bitarr search plugin") + u" (*.py)"));
     for (const QString &path : pathsList)
     {
         startAsyncOp();
