@@ -24,7 +24,8 @@
         const n = Number(value);
         return Number.isFinite(n) ? `${n.toFixed(1)}%` : "—";
     };
-    const ms = (value) => (Number.isFinite(Number(value)) ? `${Number(value)} ms` : "—");
+    // libtorrent reports disk job time and request latency in microseconds
+    const us = (value) => (Number.isFinite(Number(value)) ? `${Number(value).toLocaleString()} \u00B5s` : "\u2014");
     const count = (value) => (Number.isFinite(Number(value)) ? Number(value).toLocaleString() : "—");
     const size = (value) => fmt.bytes(Number(value));
     const limit = (value) => (value > 0 ? fmt.speed(value) : "Unlimited");
@@ -59,11 +60,11 @@
             ["Read cache overload", "rco", (s) => pct(s.read_cache_overload)],
             ["Write cache overload", "wco", (s) => pct(s.write_cache_overload)],
             ["Queued I/O jobs", "qio", (s) => count(s.queued_io_jobs)],
-            ["Average time in queue", "avg", (s) => ms(s.average_time_queue)],
+            ["Average time in queue", "avg", (s) => us(s.average_time_queue)],
             ["Buffer size", "buf", (s) => size(s.total_buffers_size)],
             ["Queued size", "qsize", (s) => size(s.total_queued_size)],
             ["Queued tracker announces", "qta", (s) => count(s.queued_tracker_announces)],
-            ["Request latency", "lat", (s) => ms(s.request_latency)]
+            ["Request latency", "lat", (s) => us(s.request_latency)]
         ]]
     ];
 
