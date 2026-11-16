@@ -100,6 +100,8 @@
             el("td", { text: peer.flags || "" }))));
 
     async function refresh() {
+        if (document.getElementById("page-transfers").hidden)
+            return;
         if (!currentHash) {
             hint("Select a torrent to see its details.");
             return;

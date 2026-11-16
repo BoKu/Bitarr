@@ -1,19 +1,26 @@
 <RCC>
     <qresource prefix="/www">
         <file>private/css/app.css</file>
+        <file>private/images/application-rss.svg</file>
+        <file>private/images/application-url.svg</file>
         <file>private/images/bitarr.svg</file>
         <file>private/images/checked-completed.svg</file>
         <file>private/images/configure.svg</file>
         <file>private/images/download.svg</file>
         <file>private/images/downloading.svg</file>
+        <file>private/images/edit-clear.svg</file>
         <file>private/images/edit-find.svg</file>
         <file>private/images/error.svg</file>
         <file>private/images/filter-active.svg</file>
         <file>private/images/filter-all.svg</file>
         <file>private/images/filter-inactive.svg</file>
         <file>private/images/filter-stalled.svg</file>
+        <file>private/images/folder-documents.svg</file>
+        <file>private/images/folder-new.svg</file>
+        <file>private/images/help-contents.svg</file>
         <file>private/images/list-add.svg</file>
         <file>private/images/list-remove.svg</file>
+        <file>private/images/plugins.svg</file>
         <file>private/images/speedometer.svg</file>
         <file>private/images/stopped.svg</file>
         <file>private/images/system-log-out.svg</file>
@@ -22,11 +29,16 @@
         <file>private/images/torrent-stop.svg</file>
         <file>private/images/upload.svg</file>
         <file>private/images/view-categories.svg</file>
+        <file>private/images/view-refresh.svg</file>
         <file>private/index.html</file>
         <file>private/js/api.js</file>
         <file>private/js/app.js</file>
         <file>private/js/details.js</file>
         <file>private/js/dialogs.js</file>
+        <file>private/js/log.js</file>
+        <file>private/js/pages.js</file>
+        <file>private/js/rss.js</file>
+        <file>private/js/search.js</file>
         <file>private/js/store.js</file>
         <file>private/js/util.js</file>
         <file>public/css/login.css</file>

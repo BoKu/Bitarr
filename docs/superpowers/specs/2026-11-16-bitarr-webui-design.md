@@ -14,8 +14,14 @@ as a behaviour description for the planned future port.
 - Details panel: General, Files (per-file priority, skip all .nfo), Trackers, Peers.
 - Settings dialog for save path, add-stopped, the three "always" options, speed limits, listen port.
 
-## Non-goals (first version)
-Search, RSS and Log pages, statistics, translations, torrent creation, category/tag management.
+## Non-goals
+Statistics, translations, torrent creation, category/tag management.
+
+## Pages
+The sidebar lists Transfers, Search, RSS and Log (hash routes `#transfers`, `#search`, `#rss`, `#log`); the filters only show on Transfers.
+- **Log**: polls `log/main` incrementally; level toggles, text filter, auto-scroll, clear.
+- **Search**: `search/start`, `search/results` polling, sortable results, download through `search/downloadTorrent`, plugin manager (enable, install, uninstall, update).
+- **RSS**: `rss/items`, read/unread state, download, add/remove feeds and folders, refresh, auto-download rules via `rss/setRule`; unread count badge in the sidebar.
 
 ## Constraints
 - Served by the existing server: `public/` before login, `private/` after login.
