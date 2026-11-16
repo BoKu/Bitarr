@@ -22,7 +22,7 @@
 ## Features
 
 - **Modern desktop app (C++/Qt)** with a dark green theme, a single Sonarr/Radarr-style sidebar (pages plus Status, Categories and Tags filters), a redrawn icon set and readable progress labels.
-- **New built-in WebUI** in plain HTML, CSS and JavaScript (no build step, no libraries). Live transfers, filters, add/resume/pause/remove, a details panel (General, Files, Trackers, Peers), settings, and a phone-friendly layout. Also has **Search** (with a plugin manager), **RSS** (feeds, folders, articles and auto-download rules) and **Log** pages. It uses the standard `/api/v2` WebAPI.
+- **New built-in WebUI** in plain HTML, CSS and JavaScript (no build step, no libraries). Live transfers, filters, add/resume/pause/remove, a details panel (General, Files, Trackers, Peers), settings, and a phone-friendly layout. Also has **Search** (with a plugin manager), **RSS** (feeds, folders, articles and auto-download rules) **Log** and **Statistics** (a live speed chart plus transfer, all-time, network and disk figures) pages. It uses the standard `/api/v2` WebAPI.
 - **Extra download options**, in Preferences and in the WebUI settings:
   - Always download in sequential order
   - Always download first and last pieces first
@@ -67,7 +67,7 @@ On macOS the binary is `build/qbittorrent.app` (the bundle name is kept for comp
 
 ## Project status
 
-Bitarr is at an early stage (0.2.x). The WebUI does not have a Statistics page yet and is English only. Feedback and bug reports are welcome in [Issues](https://github.com/BoKu/Bitarr/issues); questions go in [Discussions](https://github.com/BoKu/Bitarr/discussions). See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
+Bitarr is at an early stage (0.2.x). The WebUI is English only. Feedback and bug reports are welcome in [Issues](https://github.com/BoKu/Bitarr/issues); questions go in [Discussions](https://github.com/BoKu/Bitarr/discussions). See [CONTRIBUTING.md](CONTRIBUTING.md) to help.
 
 ## Credits and licence
 

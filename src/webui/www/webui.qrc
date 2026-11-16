@@ -39,6 +39,7 @@
         <file>private/js/pages.js</file>
         <file>private/js/rss.js</file>
         <file>private/js/search.js</file>
+        <file>private/js/stats.js</file>
         <file>private/js/store.js</file>
         <file>private/js/util.js</file>
         <file>public/css/login.css</file>
