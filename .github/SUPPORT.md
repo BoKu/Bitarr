@@ -1,18 +1,10 @@
-# Support Resources
+# Support
 
-The issue tracker is only for bug reports/feature requests related to the project itself.
+The issue tracker is only for bug reports and feature requests about Bitarr itself.
 
-Please do not use the issue tracker for questions about general program usage,
-how BitTorrent (the protocol) works in general, etc.
+For questions about using or setting up Bitarr, please use the
+[Discussions section](https://github.com/BoKu/Bitarr/discussions).
 
-For such questions, use one of the following community support resources:
-
-* The [discussions section][discussions-url]
-
-* The [official forum][forum-url]
-
-* The [qBittorrent subreddit][subreddit-url]
-
-[discussions-url]: https://github.com/qbittorrent/qBittorrent/discussions
-[forum-url]: http://forum.qbittorrent.org/
-[subreddit-url]: https://www.reddit.com/r/qBittorrent/
+Bitarr is based on [qBittorrent](https://github.com/qbittorrent/qBittorrent). General BitTorrent client
+questions may also be answered by the qBittorrent community, but problems specific to Bitarr (its theme,
+WebUI, standalone settings and the extra download options) belong here.
