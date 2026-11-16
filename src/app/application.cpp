@@ -317,8 +317,8 @@ Application::Application(int &argc, char **argv)
     qRegisterMetaType<Log::Msg>("Log::Msg");
     qRegisterMetaType<Log::Peer>("Log::Peer");
 
-    setApplicationName(u"qBittorrent"_s);
-    setOrganizationDomain(u"qbittorrent.org"_s);
+    setApplicationName(u"Bitarr"_s);
+    setOrganizationDomain(u"io.github.boku"_s);
 #if !defined(DISABLE_GUI)
     setDesktopFileName(u"org.qbittorrent.qBittorrent"_s);
     setQuitOnLastWindowClosed(false);

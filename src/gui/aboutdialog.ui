@@ -103,35 +103,21 @@
           <item row="0" column="1">
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string notr="true">Sledgehammer999</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Nationality:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Greece</string>
+             <string notr="true">BoKu</string>
             </property>
            </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>E-mail:</string>
+             <string>GitHub:</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
            <widget class="QLabel" name="label_19">
             <property name="text">
-             <string notr="true">&lt;a href=&quot;mailto:sledgehammer999@qbittorrent.org&quot;&gt;sledgehammer999@qbittorrent.org&lt;/a&gt;</string>
+             <string notr="true">&lt;a href=&quot;https://github.com/BoKu&quot;&gt;github.com/BoKu&lt;/a&gt;</string>
             </property>
             <property name="openExternalLinks">
              <bool>true</bool>
@@ -160,7 +146,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Original author</string>
+          <string>Original qBittorrent author</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">

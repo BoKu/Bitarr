@@ -133,8 +133,7 @@ namespace
 #if !defined(Q_OS_WIN) || defined(DISABLE_GUI)
     void displayVersion()
     {
-        // applicationName() stays "qBittorrent" because it names the profile directory
-        printf("Bitarr %s\n", QBT_VERSION);
+        printf("%s %s\n", qUtf8Printable(qApp->applicationName()), QBT_VERSION);
     }
 #endif
 

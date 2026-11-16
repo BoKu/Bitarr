@@ -49,8 +49,8 @@
     </screenshot>
   </screenshots>
   <update_contact>sledgehammer999@qbittorrent.org</update_contact>
-  <developer id="org.qbittorrent">
-    <name>The Bitarr Project</name>
+  <developer id="io.github.boku">
+    <name>BoKu</name>
   </developer>
   <url type="homepage">https://github.com/BoKu/Bitarr</url>
   <url type="bugtracker">https://github.com/BoKu/Bitarr/issues</url>
