@@ -32,7 +32,7 @@ B.pages = {
 
     buildNav() {
         const nav = document.getElementById("nav");
-        const order = ["transfers", "search", "rss", "log"];
+        const order = ["transfers", "search", "rss", "log", "stats"];
         const entries = [...B.pages.defs].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
         nav.replaceChildren(...entries.map(([id, def]) => {
             const badge = B.el("b");

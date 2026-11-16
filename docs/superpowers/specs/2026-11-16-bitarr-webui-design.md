@@ -18,11 +18,11 @@ as a behaviour description for the planned future port.
 
 ## Non-goals
 
-Statistics, translations, torrent creation, category/tag management.
+Translations, torrent creation, category/tag management.
 
 ## Pages
 
-The sidebar lists Transfers, Search, RSS and Log (hash routes `#transfers`, `#search`, `#rss`, `#log`); the filters only show on Transfers.
+The sidebar lists Transfers, Search, RSS, Log and Statistics (hash routes `#transfers`, `#search`, `#rss`, `#log`, `#stats`); the filters only show on Transfers.
 
 - **Log**: polls `log/main` incrementally; level toggles, text filter, auto-scroll, clear.
 - **Search**: `search/start`, `search/results` polling, sortable results, download through `search/downloadTorrent`, plugin manager (enable, install, uninstall, update).
@@ -41,3 +41,4 @@ The sidebar lists Transfers, Search, RSS and Log (hash routes `#transfers`, `#se
 - Progress label is drawn dark over the filled part and light over the rest.
 - Add dialog sends `urls`, `torrents`, `savepath`, `category`, `tags`, `stopped`, `sequentialDownload`,
   `firstLastPiecePrio` and `excludeNfoFiles` (new, Bitarr-specific) to `torrents/add`.
+- **Statistics**: a canvas line chart of download and upload speed (about five minutes, sampled from the `sync/maindata` poll even while the page is closed) and cards for transfer, all-time, network and disk/cache figures from `server_state`.
