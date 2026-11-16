@@ -571,6 +571,7 @@ SessionImpl::SessionImpl(QObject *parent)
     , m_isAddTorrentStopped(BITTORRENT_SESSION_KEY(u"AddTorrentStopped"_s), false)
     , m_isAlwaysSequentialDownload(BITTORRENT_SESSION_KEY(u"AlwaysSequentialDownload"_s), false)
     , m_isAlwaysFirstLastPiecePriority(BITTORRENT_SESSION_KEY(u"AlwaysFirstLastPiecePriority"_s), false)
+    , m_isNeverDownloadNfoFiles(BITTORRENT_SESSION_KEY(u"NeverDownloadNfoFiles"_s), false)
     , m_torrentStopCondition(BITTORRENT_SESSION_KEY(u"TorrentStopCondition"_s), Torrent::StopCondition::None)
     , m_torrentContentLayout(BITTORRENT_SESSION_KEY(u"TorrentContentLayout"_s), TorrentContentLayout::Original)
     , m_isAppendExtensionEnabled(BITTORRENT_SESSION_KEY(u"AddExtensionToIncompleteFiles"_s), false)
@@ -1426,6 +1427,16 @@ bool SessionImpl::isAlwaysFirstLastPiecePriority() const
 void SessionImpl::setAlwaysFirstLastPiecePriority(const bool value)
 {
     m_isAlwaysFirstLastPiecePriority = value;
+}
+
+bool SessionImpl::isNeverDownloadNfoFiles() const
+{
+    return m_isNeverDownloadNfoFiles;
+}
+
+void SessionImpl::setNeverDownloadNfoFiles(const bool value)
+{
+    m_isNeverDownloadNfoFiles = value;
 }
 
 Torrent::StopCondition SessionImpl::torrentStopCondition() const
@@ -3043,6 +3054,17 @@ bool SessionImpl::addTorrent_impl(const TorrentDescriptor &torrentDescr, const A
         {
             // Check file name blacklist when priorities are not explicitly set
             applyFilenameFilter(filePaths, filePriorities);
+        }
+
+        // "Never download .nfo files": force-ignore them, whatever priorities were set before
+        if (isNeverDownloadNfoFiles() || addTorrentParams.excludeNfoFiles)
+        {
+            filePriorities.resize(filePaths.count(), DownloadPriority::Normal);
+            for (qsizetype i = 0; i < filePaths.count(); ++i)
+            {
+                if (isNfoFile(filePaths.at(i)))
+                    filePriorities[i] = DownloadPriority::Ignored;
+            }
         }
 
         if (!loadTorrentParams.hasFinishedStatus)
@@ -7016,7 +7038,7 @@ void SessionImpl::saveStatistics() const
     const QVariantHash stats {
         {u"AlltimeDL"_s, m_status.allTimeDownload},
         {u"AlltimeUL"_s, m_status.allTimeUpload}};
-    std::unique_ptr<QSettings> settings = Profile::instance()->applicationSettings(u"qBittorrent-data"_s);
+    std::unique_ptr<QSettings> settings = Profile::instance()->applicationSettings(u"Bitarr-data"_s);
     settings->setValue(u"Stats/AllStats"_s, stats);
 
     m_statisticsLastUpdateTimer.start();
@@ -7025,7 +7047,7 @@ void SessionImpl::saveStatistics() const
 
 void SessionImpl::loadStatistics()
 {
-    const std::unique_ptr<QSettings> settings = Profile::instance()->applicationSettings(u"qBittorrent-data"_s);
+    const std::unique_ptr<QSettings> settings = Profile::instance()->applicationSettings(u"Bitarr-data"_s);
     const QVariantHash value = settings->value(u"Stats/AllStats"_s).toHash();
 
     m_previouslyDownloaded = value[u"AlltimeDL"_s].toLongLong();

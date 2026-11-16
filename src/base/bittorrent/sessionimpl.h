@@ -205,6 +205,8 @@ namespace BitTorrent
         void setAlwaysSequentialDownload(bool value) override;
         bool isAlwaysFirstLastPiecePriority() const override;
         void setAlwaysFirstLastPiecePriority(bool value) override;
+        bool isNeverDownloadNfoFiles() const override;
+        void setNeverDownloadNfoFiles(bool value) override;
         Torrent::StopCondition torrentStopCondition() const override;
         void setTorrentStopCondition(Torrent::StopCondition stopCondition) override;
         TorrentContentLayout torrentContentLayout() const override;
@@ -758,6 +760,7 @@ namespace BitTorrent
         CachedSettingValue<bool> m_isAddTorrentStopped;
         CachedSettingValue<bool> m_isAlwaysSequentialDownload;
         CachedSettingValue<bool> m_isAlwaysFirstLastPiecePriority;
+        CachedSettingValue<bool> m_isNeverDownloadNfoFiles;
         CachedSettingValue<Torrent::StopCondition> m_torrentStopCondition;
         CachedSettingValue<TorrentContentLayout> m_torrentContentLayout;
         CachedSettingValue<bool> m_isAppendExtensionEnabled;

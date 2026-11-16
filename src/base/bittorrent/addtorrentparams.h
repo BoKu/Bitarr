@@ -47,6 +47,12 @@ namespace BitTorrent
 {
     enum class DownloadPriority;
 
+    // True for files with a ".nfo" extension (case-insensitive)
+    inline bool isNfoFile(const Path &file)
+    {
+        return (file.extension().compare(QLatin1String(".nfo"), Qt::CaseInsensitive) == 0);
+    }
+
     struct AddTorrentParams
     {
         QString name;
@@ -57,6 +63,7 @@ namespace BitTorrent
         Path downloadPath;
         bool sequential = false;
         bool firstLastPiecePriority = false;
+        bool excludeNfoFiles = false;
         bool addForced = false;
         std::optional<bool> addToQueueTop;
         std::optional<bool> addStopped;

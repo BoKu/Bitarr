@@ -1097,6 +1097,16 @@
                 </widget>
                </item>
                <item>
+                <widget class="QCheckBox" name="checkNeverNfo">
+                 <property name="toolTip">
+                  <string>.nfo files will never be downloaded</string>
+                 </property>
+                 <property name="text">
+                  <string>Always never download .nfo files</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="stopConditionLayout">
                  <item>
                   <widget class="QLabel" name="stopConditionLabel">
