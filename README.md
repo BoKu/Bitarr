@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/BoKu/Bitarr/releases/latest"><b>Download the latest release</b></a>
-  (currently <b>v0.3.0</b>)
+  (currently <b>v0.3.1</b>)
 </p>
 
 <p align="center">
