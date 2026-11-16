@@ -4,6 +4,7 @@
 
 * Bitarr
   * `app/preferences` and `app/setPreferences` include `always_sequential_download` (bool) and `always_first_last_pieces` (bool); when true, every added torrent downloads sequentially / first and last pieces first
+  * `torrents/add` accepts `excludeNfoFiles` (bool); when true, `.nfo` files in the added torrent(s) are set to "do not download"
   * `app/preferences` and `app/setPreferences` include `never_download_nfo_files` (bool); when true, `.nfo` files in every added torrent are set to "do not download"
 * [#24955](https://github.com/qbittorrent/qBittorrent/pull/24955)
   * `search/results` endpoint includes `engineFullName` (string) data as the display name of the engine
