@@ -1,8 +1,8 @@
+# Bitarr
+
 <p align="center">
   <img src="src/icons/bitarr.svg" alt="Bitarr logo" width="96">
 </p>
-
-<h1 align="center">Bitarr</h1>
 
 <p align="center">
   A modern BitTorrent client with a phosphor-green look, a built-in web interface and a few extra download options.<br>
