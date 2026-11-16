@@ -1,0 +1,253 @@
+name: Release builds
+
+# Builds the Linux AppImage and the Windows zip/installer, then attaches them
+# to the GitHub release for the given tag.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build and attach assets to (for example v0.3.1)"
+        required: true
+
+permissions: {}
+
+env:
+  tag: ${{ github.event.release.tag_name || inputs.tag }}
+  libtorrent_version: "2.1.2"
+  qt_version_windows: "6.10.3"
+  qt_version_linux: "6.6.3"
+
+jobs:
+  linux:
+    name: Linux x86_64 AppImage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      boost_path: "${{ github.workspace }}/../boost"
+      libtorrent_path: "${{ github.workspace }}/../libtorrent"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.tag }}
+          persist-credentials: false
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install build-essential cmake ninja-build libssl-dev zlib1g-dev libfuse2
+
+      - name: Install boost
+        run: |
+          curl -L -o "${{ runner.temp }}/boost.tar.gz" "https://archives.boost.io/release/1.77.0/source/boost_1_77_0.tar.gz"
+          echo "5347464af5b14ac54bb945dc68f1dd7c56f0dad7262816b956138fc53bcc0131  ${{ runner.temp }}/boost.tar.gz" | sha256sum -c -
+          tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."
+          mv "${{ github.workspace }}/.."/boost_* "${{ env.boost_path }}"
+          cd "${{ env.boost_path }}"
+          ./bootstrap.sh
+          ./b2 stage --stagedir=./ --with-headers
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.qt_version_linux }}
+          archives: icu qtbase qtdeclarative qtsvg qttools
+          modules: qtimageformats
+          cache: true
+
+      - name: Install libtorrent
+        run: |
+          git clone --branch v${{ env.libtorrent_version }} --depth 1 --recurse-submodules \
+            https://github.com/arvidn/libtorrent.git ${{ env.libtorrent_path }}
+          cd ${{ env.libtorrent_path }}
+          cmake -B build -G Ninja \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -Ddeprecated-functions=OFF
+          cmake --build build
+          sudo cmake --install build
+
+      - name: Build Bitarr
+        run: |
+          cmake -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DGUI=ON
+          cmake --build build
+          QT_QPA_PLATFORM=offscreen build/qbittorrent -v
+          DESTDIR=AppDir cmake --install build
+
+      - name: Package AppImage
+        run: |
+          curl -L -Z \
+            -O https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+          chmod +x linuxdeploy-*.AppImage
+          rm -f "$QT_PLUGIN_PATH/sqldrivers/libqsqlmimer.so" "$QT_PLUGIN_PATH/sqldrivers/libqsqlmysql.so"
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt
+          mkdir -p AppDir/apprun-hooks
+          rm -f AppDir/apprun-hooks/*
+          cp .github/workflows/helper/appimage/export_vars.sh AppDir/apprun-hooks/export_vars.sh
+          NO_APPSTREAM=1 OUTPUT="Bitarr-${{ env.tag }}-linux-x86_64.AppImage" \
+            ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ env.tag }}" "Bitarr-${{ env.tag }}-linux-x86_64.AppImage" --clobber --repo "${{ github.repository }}"
+
+  windows:
+    name: Windows x64
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      boost_path: "${{ github.workspace }}/../boost"
+      libtorrent_path: "${{ github.workspace }}/../libtorrent"
+      vcpkg_path: "c:/vcpkg"
+      triplet: x64-windows-static-md-release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.tag }}
+          persist-credentials: false
+
+      - name: Setup devcmd
+        uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
+
+      - name: Install build tools
+        run: |
+          if ((Get-Command "ninja.exe" -ErrorAction SilentlyContinue) -eq $null)
+          {
+            choco install ninja
+          }
+
+      - name: Set variables for vcpkg
+        uses: actions/github-script@v9
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', (process.env.ACTIONS_CACHE_URL || ''));
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', (process.env.ACTIONS_RUNTIME_TOKEN || ''));
+
+      - name: Install dependencies with vcpkg
+        run: |
+          New-Item -Force -ItemType File -Path "${{ env.vcpkg_path }}/triplets_overlay/${{ env.triplet }}.cmake"
+          Add-Content `
+            -Path "${{ env.vcpkg_path }}/triplets_overlay/${{ env.triplet }}.cmake" `
+            -Value @("set(VCPKG_TARGET_ARCHITECTURE x64)",
+              "set(VCPKG_LIBRARY_LINKAGE static)",
+              "set(VCPKG_CRT_LINKAGE dynamic)",
+              "set(VCPKG_BUILD_TYPE release)")
+          ${{ env.vcpkg_path }}/vcpkg.exe upgrade --no-dry-run --overlay-triplets="${{ env.vcpkg_path }}/triplets_overlay"
+          ${{ env.vcpkg_path }}/vcpkg.exe install `
+            --binarysource="clear;x-gha,readwrite" `
+            --clean-after-build `
+            --overlay-triplets="${{ env.vcpkg_path }}/triplets_overlay" `
+            "boost-build:${{ env.triplet }}" "openssl:${{ env.triplet }}" "zlib:${{ env.triplet }}"
+
+      - name: Install boost
+        run: |
+          curl -L -o "${{ runner.temp }}/boost.tar.gz" "https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.gz"
+          if ((Get-FileHash -Algorithm SHA256 "${{ runner.temp }}/boost.tar.gz").Hash -ne "5734305f40a76c30f951c9abd409a45a2a19fb546efe4162119250bbe4d3a463")
+          {
+            throw "boost.tar.gz does not match its expected SHA-256"
+          }
+          tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."
+          move "${{ github.workspace }}/../boost_*" "${{ env.boost_path }}"
+          cd "${{ env.boost_path }}"
+          ${{ env.vcpkg_path }}/installed/${{ env.triplet }}/tools/boost-build/b2.exe `
+            stage toolset=msvc --stagedir=.\ --with-headers
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.qt_version_windows }}
+          arch: win64_msvc2022_64
+          archives: qtbase qtsvg qttools
+          modules: qtimageformats
+          cache: true
+
+      - name: Install libtorrent
+        run: |
+          git clone --branch v${{ env.libtorrent_version }} --depth 1 --recurse-submodules `
+            https://github.com/arvidn/libtorrent.git ${{ env.libtorrent_path }}
+          cd ${{ env.libtorrent_path }}
+          $env:CFLAGS+=" /guard:cf"
+          $env:CXXFLAGS+=" /guard:cf"
+          $env:LDFLAGS+=" /GUARD:CF"
+          cmake -B build -G Ninja `
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+            -DCMAKE_CXX_STANDARD=20 `
+            -DCMAKE_INSTALL_PREFIX="${{ env.libtorrent_path }}/install" `
+            -DCMAKE_TOOLCHAIN_FILE="${{ env.vcpkg_path }}/scripts/buildsystems/vcpkg.cmake" `
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" `
+            -DBUILD_SHARED_LIBS=OFF `
+            -Ddeprecated-functions=OFF `
+            -Dstatic_runtime=OFF `
+            -DVCPKG_TARGET_TRIPLET=${{ env.triplet }}
+          cmake --build build
+          cmake --install build
+
+      - name: Build Bitarr
+        run: |
+          cmake -B build -G Ninja `
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo `
+            -DCMAKE_TOOLCHAIN_FILE="${{ env.vcpkg_path }}/scripts/buildsystems/vcpkg.cmake" `
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" `
+            -DLibtorrentRasterbar_DIR="${{ env.libtorrent_path }}/install/lib/cmake/LibtorrentRasterbar" `
+            -DMSVC_RUNTIME_DYNAMIC=ON `
+            -DVCPKG_TARGET_TRIPLET=${{ env.triplet }}
+          cmake --build build
+
+      - name: Collect files
+        run: |
+          $dest = "upload/Bitarr"
+          $qt = "${{ env.Qt_ROOT_DIR }}"
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          copy build/qbittorrent.exe $dest
+          copy dist/windows/qt.conf $dest
+          foreach ($d in "Core","Gui","Network","Sql","Svg","Widgets","Xml") { copy "$qt/bin/Qt6$d.dll" $dest }
+          $plugins = @{
+            "iconengines"  = @("qsvgicon.dll")
+            "imageformats" = @("qgif.dll","qicns.dll","qico.dll","qjpeg.dll","qsvg.dll","qtga.dll","qtiff.dll","qwbmp.dll","qwebp.dll")
+            "platforms"    = @("qwindows.dll")
+            "sqldrivers"   = @("qsqlite.dll")
+            "styles"       = @("qmodernwindowsstyle.dll")
+            "tls"          = @("qschannelbackend.dll")
+          }
+          foreach ($dir in $plugins.Keys) {
+            New-Item -ItemType Directory -Force "$dest/plugins/$dir" | Out-Null
+            foreach ($f in $plugins[$dir]) { copy "$qt/plugins/$dir/$f" "$dest/plugins/$dir" }
+          }
+
+      - name: Create zip
+        run: Compress-Archive -Path upload/Bitarr -DestinationPath "Bitarr-${{ env.tag }}-windows-x64.zip"
+
+      - name: Install NSIS
+        uses: repolevedavaj/install-nsis@65a75ea79c3d1ddde868e98b7f9447e2e623401c # v1.3.0
+        with:
+          nsis-version: '3.12'
+
+      - name: Create installer
+        run: |
+          7z x -o"dist/windows/" "dist/windows/NSISPlugins.zip"
+          makensis /DQBT_CPU_ARCH="x64" /DQBT_DIST_DIR="../../upload/Bitarr" /WX dist/windows/qbittorrent.nsi
+          move "dist/windows/qbittorrent_*_setup.exe" "Bitarr-${{ env.tag }}-windows-x64-setup.exe"
+
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ env.tag }}" "Bitarr-${{ env.tag }}-windows-x64.zip" "Bitarr-${{ env.tag }}-windows-x64-setup.exe" --clobber --repo "${{ github.repository }}"
