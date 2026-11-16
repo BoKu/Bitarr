@@ -179,7 +179,7 @@
     });
 
     document.addEventListener("keydown", (event) => {
-        if (document.querySelector(".overlay") || /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName))
+        if ((B.pages.current !== "transfers") || document.querySelector(".overlay") || /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName))
             return;
         if ((event.key === "a") && (event.metaKey || event.ctrlKey)) {
             event.preventDefault();
@@ -313,7 +313,7 @@
             if (node.textContent !== value)
                 node.textContent = value;
         }
-        $("navCount").textContent = String(B.store.torrents.size);
+        B.pages.setBadge("transfers", B.store.torrents.size);
     }
 
     // ---- status bar ----------------------------------------------------------------------------------------------
@@ -346,8 +346,10 @@
         afterSelectionChange();
     });
 
+    B.pages.register("transfers", { label: "Transfers", icon: "downloading", root: $("page-transfers") });
     renderHead();
     B.details.init();
     afterSelectionChange();
     B.store.start();
+    B.pages.start();
 })();
