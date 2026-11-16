@@ -31,6 +31,7 @@
 #include "uithememanager.h"
 
 #include <QApplication>
+#include <QFile>
 #include <QPalette>
 #include <QPixmapCache>
 #include <QResource>
@@ -129,6 +130,10 @@ UIThemeManager::UIThemeManager()
         applyPalette();
         applyStyleSheet();
     }
+    else
+    {
+        applyBuiltInTheme();
+    }
 }
 
 UIThemeManager *UIThemeManager::instance()
@@ -184,6 +189,38 @@ void UIThemeManager::setTrayIconStyle(const TrayIconStyle value)
 void UIThemeManager::applyStyleSheet() const
 {
     qApp->setStyleSheet(QString::fromUtf8(m_themeSource->readStyleSheet()));
+}
+
+void UIThemeManager::applyBuiltInTheme() const
+{
+    // Built-in Bitarr look: Fusion style, dark phosphor-green palette and stylesheet.
+    QApplication::setStyle(u"Fusion"_s);
+
+    QPalette palette;
+    const QColor text {0xe3, 0xf3, 0xe9};
+    const QColor muted {0x7d, 0x9a, 0x88};
+    const QColor accent {0x3d, 0xff, 0x8b};
+    palette.setColor(QPalette::Window, QColor(0x07, 0x0c, 0x09));
+    palette.setColor(QPalette::WindowText, text);
+    palette.setColor(QPalette::Base, QColor(0x0e, 0x16, 0x11));
+    palette.setColor(QPalette::AlternateBase, QColor(0x10, 0x1a, 0x14));
+    palette.setColor(QPalette::Text, text);
+    palette.setColor(QPalette::PlaceholderText, muted);
+    palette.setColor(QPalette::Button, QColor(0x15, 0x23, 0x1a));
+    palette.setColor(QPalette::ButtonText, text);
+    palette.setColor(QPalette::ToolTipBase, QColor(0x15, 0x23, 0x1a));
+    palette.setColor(QPalette::ToolTipText, text);
+    palette.setColor(QPalette::Highlight, accent);
+    palette.setColor(QPalette::HighlightedText, QColor(0x02, 0x14, 0x0a));
+    palette.setColor(QPalette::Link, accent);
+    palette.setColor(QPalette::BrightText, QColor(0xff, 0x5d, 0x5d));
+    palette.setColor(QPalette::Disabled, QPalette::Text, QColor(0x4d, 0x64, 0x55));
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(0x4d, 0x64, 0x55));
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(0x4d, 0x64, 0x55));
+    qApp->setPalette(palette);
+
+    if (QFile file {u":/icons/bitarr.qss"_s}; file.open(QIODevice::ReadOnly))
+        qApp->setStyleSheet(QString::fromUtf8(file.readAll()));
 }
 
 void UIThemeManager::onColorSchemeChanged()
