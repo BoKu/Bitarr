@@ -5,7 +5,7 @@
 ; Doing so may make antivirus software flag the installer as virus/malware
 ;!define USE_UPX
 
-; qBittorrent version
+; Bitarr version
 ; The string MUST contain ONLY numbers delimited by dots.
 ; It MUST contain a maximum of 4 delimited numbers
 ; Other values will result in undefined behavior
@@ -14,11 +14,11 @@
 ; 4.5.1.3 -> good
 ; 4.5.1.3.2 -> bad
 ; 4.5.0beta -> bad
-!define /ifndef QBT_VERSION "5.4.0"
+!define /ifndef QBT_VERSION "0.1.0"
 
 ; Option that controls the installer's window name
 ; If set, its value will be used like this:
-; "qBittorrent ${QBT_INSTALLER_FILENAME}"
+; "Bitarr ${QBT_INSTALLER_FILENAME}"
 ; If not set, the window name will be auto composed from QBT_VERSION
 ; If you set this define then you MUST set QBT_INSTALLER_FILENAME too. Otherwise it will be ignored.
 ; This define is meant to ease automation from scripts/commandline
@@ -57,7 +57,7 @@
     !define QBT_INSTALLER_FILENAME "${QBT_VERSION}_${QBT_CPU_ARCH}"
 !endif
 
-!define /ifndef QBT_DIST_DIR "qBittorrent"
+!define /ifndef QBT_DIST_DIR "Bitarr"
 !define /ifndef QBT_NSIS_PLUGINS_DIR "NSISPlugins"
 
 Unicode true
@@ -86,16 +86,16 @@ SetCompressorDictSize 64
 !define MUI_FINISHPAGE_RUN_TEXT $(launch_qbt)
 
 ; The name of the installer
-Name "qBittorrent ${QBT_INSTALLER_WINDOWNAME}"
+Name "Bitarr ${QBT_INSTALLER_WINDOWNAME}"
 
 ; The file to write
 OutFile "qbittorrent_${QBT_INSTALLER_FILENAME}_setup.exe"
 
 ;Installer Version Information
-VIAddVersionKey "ProductName" "qBittorrent"
+VIAddVersionKey "ProductName" "Bitarr"
 VIAddVersionKey "CompanyName" "The qBittorrent project"
 VIAddVersionKey "LegalCopyright" "Copyright ©2006-2026 The qBittorrent project"
-VIAddVersionKey "FileDescription" "qBittorrent - A Bittorrent Client"
+VIAddVersionKey "FileDescription" "Bitarr - A Bittorrent Client"
 VIAddVersionKey "FileVersion" "${QBT_VERSION}"
 
 ; VIProductVersion needs a 4 part version.
@@ -104,7 +104,7 @@ ${VersionCompleteXXXX} ${QBT_VERSION} VERSION_4_PART
 VIProductVersion "${VERSION_4_PART}"
 
 ; The default installation directory.
-InstallDir $PROGRAMFILES64\qBittorrent
+InstallDir $PROGRAMFILES64\Bitarr
 
 ; Registry key to check for directory (so if you install again, it will
 ; overwrite the old one automatically)

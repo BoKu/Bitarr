@@ -44,6 +44,8 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileSystemWatcher>
+#include <QHBoxLayout>
+#include <QIcon>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
@@ -278,11 +280,7 @@ MainWindow::MainWindow(IGUIApplication *app, const WindowState initialState, con
     hSplitter->addWidget(m_propertiesWidget);
     m_splitter->addWidget(hSplitter);
     m_splitter->setCollapsible(0, false);
-    m_tabs->addTab(m_splitter,
-#ifndef Q_OS_MACOS
-        UIThemeManager::instance()->getIcon(u"folder-remote"_s),
-#endif
-        tr("Transfers"));
+    m_tabs->addTab(m_splitter, UIThemeManager::instance()->getIcon(u"downloading"_s), tr("Transfers"));
     // Filter types
     const QList<TransferListModel::Column> filterTypes = {
         TransferListModel::Column::TR_NAME
@@ -299,12 +297,25 @@ MainWindow::MainWindow(IGUIApplication *app, const WindowState initialState, con
     connect(hSplitter, &QSplitter::splitterMoved, this, &MainWindow::saveSettings);
     connect(m_splitter, &QSplitter::splitterMoved, this, &MainWindow::saveSplitterSettings);
 
-#ifdef Q_OS_MACOS
-    // Increase top spacing to avoid tab overlapping
-    m_ui->centralWidgetLayout->addSpacing(8);
-#endif
-
+    // The navigation rail sits flush against the window edge
+    m_ui->centralWidgetLayout->setContentsMargins(0, 0, 0, 0);
     m_ui->centralWidgetLayout->addWidget(m_tabs);
+
+    // Brand (logo + name) at the start of the toolbar
+    {
+        auto *brand = new QWidget(m_ui->toolBar);
+        brand->setObjectName(u"navBrand"_s);
+        auto *brandLayout = new QHBoxLayout(brand);
+        brandLayout->setContentsMargins(10, 0, 18, 0);
+        brandLayout->setSpacing(10);
+        auto *logo = new QLabel(brand);
+        logo->setPixmap(QIcon(u":/icons/bitarr.svg"_s).pixmap(26, 26));
+        auto *name = new QLabel(u"Bitarr"_s, brand);
+        name->setObjectName(u"navBrandName"_s);
+        brandLayout->addWidget(logo);
+        brandLayout->addWidget(name);
+        m_ui->toolBar->insertWidget(m_ui->toolBar->actions().value(0), brand);
+    }
 
     m_queueSeparator = m_ui->toolBar->insertSeparator(m_ui->actionTopQueuePos);
     m_queueSeparatorMenu = m_ui->menuEdit->insertSeparator(m_ui->actionTopQueuePos);
@@ -495,7 +506,7 @@ MainWindow::MainWindow(IGUIApplication *app, const WindowState initialState, con
                 hide();
                 if (!pref->minimizeToTrayNotified())
                 {
-                    app->desktopIntegration()->showNotification(tr("qBittorrent is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+                    app->desktopIntegration()->showNotification(tr("Bitarr is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
                     pref->setMinimizeToTrayNotified(true);
                 }
             }
@@ -594,7 +605,7 @@ void MainWindow::setTitleSuffix(const QString &suffix)
 {
     const auto emDash = QChar(0x2014);
     const QString separator = u' ' + emDash + u' ';
-    m_windowTitle = QStringLiteral("qBittorrent " QBT_VERSION)
+    m_windowTitle = QStringLiteral("Bitarr " QBT_VERSION)
         + (!suffix.isEmpty() ? (separator + suffix) : QString());
 
     refreshWindowTitle();
@@ -753,12 +764,8 @@ void MainWindow::displayRSSTab(bool enable)
                 on_actionOptions_triggered();
                 m_options->showRSSTab();
             });
-#ifdef Q_OS_MACOS
-            m_tabs->addTab(m_rssWidget, tr("RSS (%1)").arg(RSS::Session::instance()->rootFolder()->unreadCount()));
-#else
             const int indexTab = m_tabs->addTab(m_rssWidget, tr("RSS (%1)").arg(RSS::Session::instance()->rootFolder()->unreadCount()));
             m_tabs->setTabIcon(indexTab, UIThemeManager::instance()->getIcon(u"application-rss"_s));
-#endif
         }
     }
     else
@@ -803,11 +810,7 @@ void MainWindow::displaySearchTab(bool enable)
                         app()->desktopIntegration()->showNotification(tr("Search Engine"), tr("Search has finished"));
                 }
             });
-            m_tabs->insertTab(1, m_searchWidget,
-#ifndef Q_OS_MACOS
-                UIThemeManager::instance()->getIcon(u"edit-find"_s),
-#endif
-                tr("Search"));
+            m_tabs->insertTab(1, m_searchWidget, UIThemeManager::instance()->getIcon(u"edit-find"_s), tr("Search"));
         }
     }
     else
@@ -837,7 +840,7 @@ void MainWindow::updateNbTorrents()
 
 void MainWindow::on_actionDocumentation_triggered() const
 {
-    QDesktopServices::openUrl(QUrl(u"https://wiki.qbittorrent.org"_s));
+    QDesktopServices::openUrl(QUrl(u"https://github.com/BoKu/Bitarr/wiki"_s));
 }
 
 void MainWindow::tabChanged([[maybe_unused]] const int newTab)
@@ -869,11 +872,7 @@ void MainWindow::saveSettings() const
 
 void MainWindow::saveSplitterSettings() const
 {
-    if (!m_transferListFiltersWidget)
-        return;
-
-    auto *pref = Preferences::instance();
-    pref->setFiltersSidebarWidth(m_splitter->sizes()[0]);
+    // The filters sidebar has a fixed width inside the navigation column, so there is nothing to save.
 }
 
 void MainWindow::cleanup()
@@ -911,6 +910,10 @@ void MainWindow::loadSettings()
         !mainGeo.isEmpty() && restoreGeometry(mainGeo))
     {
         m_posInitialized = true;
+    }
+    else
+    {
+        resize(1280, 800); // roomier first-run size for the sidebar layout
     }
 }
 
@@ -1091,7 +1094,7 @@ void MainWindow::notifyOfUpdate(const QString &)
 {
     // Show restart message
     m_statusBar->showRestartRequired();
-    LogMsg(tr("qBittorrent was just updated and needs to be restarted for the changes to be effective.")
+    LogMsg(tr("Bitarr was just updated and needs to be restarted for the changes to be effective.")
                                    , Log::CRITICAL);
     // Delete the executable watcher
     delete m_executableWatcher;
@@ -1227,7 +1230,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
         QMetaObject::invokeMethod(this, &QWidget::hide, Qt::QueuedConnection);
         if (!pref->closeToTrayNotified())
         {
-            app()->desktopIntegration()->showNotification(tr("qBittorrent is closed to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+            app()->desktopIntegration()->showNotification(tr("Bitarr is closed to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
             pref->setCloseToTrayNotified(true);
         }
         return;
@@ -1245,9 +1248,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
         {
             if (!isVisible())
                 show();
-            QMessageBox confirmBox(QMessageBox::Question, tr("Exiting qBittorrent"),
+            QMessageBox confirmBox(QMessageBox::Question, tr("Exiting Bitarr"),
                                    // Split it because the last sentence is used in the WebUI
-                                   tr("Some files are currently transferring.") + u'\n' + tr("Are you sure you want to quit qBittorrent?"),
+                                   tr("Some files are currently transferring.") + u'\n' + tr("Are you sure you want to quit Bitarr?"),
                                    QMessageBox::NoButton, this);
             QPushButton *noBtn = confirmBox.addButton(tr("&No"), QMessageBox::NoRole);
             confirmBox.addButton(tr("&Yes"), QMessageBox::YesRole);
@@ -1320,7 +1323,7 @@ bool MainWindow::event(QEvent *e)
                     QMetaObject::invokeMethod(this, &QWidget::hide, Qt::QueuedConnection);
                     if (!pref->minimizeToTrayNotified())
                     {
-                        app()->desktopIntegration()->showNotification(tr("qBittorrent is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
+                        app()->desktopIntegration()->showNotification(tr("Bitarr is minimized to tray"), tr("This behavior can be changed in the settings. You won't be reminded again."));
                         pref->setMinimizeToTrayNotified(true);
                     }
                     return true;
@@ -1405,19 +1408,12 @@ void MainWindow::showFiltersSidebar(const bool show)
 {
     if (show && !m_transferListFiltersWidget)
     {
-        m_transferListFiltersWidget = new TransferListFiltersWidget(m_splitter, m_transferListWidget, isDownloadTrackerFavicon());
-        m_splitter->insertWidget(0, m_transferListFiltersWidget);
-        m_splitter->setCollapsible(0, true);
-        // From https://doc.qt.io/qt-5/qsplitter.html#setSizes:
-        // Instead, any additional/missing space is distributed amongst the widgets
-        // according to the relative weight of the sizes.
-        m_splitter->setStretchFactor(0, 0);
-        m_splitter->setStretchFactor(1, 1);
-        m_splitter->setSizes({Preferences::instance()->getFiltersSidebarWidth()});
+        // One left-hand sidebar: the filters live in the navigation column, below the page entries
+        m_transferListFiltersWidget = new TransferListFiltersWidget(m_tabs, m_transferListWidget, isDownloadTrackerFavicon());
+        static_cast<HidableTabWidget *>(m_tabs.data())->setSidebarWidget(m_transferListFiltersWidget, m_splitter);
     }
     else if (!show && m_transferListFiltersWidget)
     {
-        saveSplitterSettings();
         delete m_transferListFiltersWidget;
         m_transferListFiltersWidget = nullptr;
     }
@@ -1721,8 +1717,8 @@ void MainWindow::handleUpdateCheckFinished(ProgramUpdater *updater, const bool i
     {
         const QString msg {tr("A new version is available.") + u"<br/>"
             + tr("Do you want to download %1?").arg(newVersion.toString()) + u"<br/><br/>"
-            + u"<a href=\"https://www.qbittorrent.org/news\">%1</a>"_s.arg(tr("Open changelog..."))};
-        auto *msgBox = new QMessageBox {QMessageBox::Question, tr("qBittorrent Update Available"), msg
+            + u"<a href=\"https://github.com/BoKu/Bitarr/releases\">%1</a>"_s.arg(tr("Open changelog..."))};
+        auto *msgBox = new QMessageBox {QMessageBox::Question, tr("Bitarr Update Available"), msg
             , (QMessageBox::Yes | QMessageBox::No), this};
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
         msgBox->setAttribute(Qt::WA_ShowWithoutActivating);
@@ -1766,7 +1762,7 @@ void MainWindow::toggleAlternativeSpeeds()
 
 void MainWindow::on_actionDonateMoney_triggered()
 {
-    QDesktopServices::openUrl(QUrl(u"https://www.qbittorrent.org/donate"_s));
+    QDesktopServices::openUrl(QUrl(u"https://github.com/BoKu/Bitarr"_s));
 }
 
 void MainWindow::showConnectionSettings()
@@ -1786,12 +1782,8 @@ void MainWindow::on_actionExecutionLogs_triggered(bool checked)
     {
         Q_ASSERT(!m_executionLog);
         m_executionLog = new ExecutionLogWidget(executionLogMsgTypes(), m_tabs);
-#ifdef Q_OS_MACOS
-        m_tabs->addTab(m_executionLog, tr("Execution Log"));
-#else
         const int indexTab = m_tabs->addTab(m_executionLog, tr("Execution Log"));
         m_tabs->setTabIcon(indexTab, UIThemeManager::instance()->getIcon(u"help-contents"_s));
-#endif
     }
     else
     {

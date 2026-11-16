@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
+        <file>bitarr.qss</file>
+        <file>bitarr.svg</file>
+        <file>bitarr-check.svg</file>
         <file>application-exit.svg</file>
         <file>application-rss.svg</file>
         <file>application-url.svg</file>

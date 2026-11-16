@@ -81,6 +81,7 @@ private slots:
     void TMMChanged(int index);
     void categoryChanged(int index);
     void contentLayoutChanged();
+    void applyNfoExclusion(bool exclude);
 
 private:
     class TorrentContentAdaptor;

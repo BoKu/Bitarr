@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Bitarr</title>
+  <!-- Phosphor radar. Artwork stays inside a 44px radius of the centre, leaving 20px of padding on every side. -->
+  <defs>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="sweep" gradientUnits="userSpaceOnUse" x1="64" y1="64" x2="100" y2="34">
+      <stop offset="0" stop-color="#3dff8b" stop-opacity="0"/>
+      <stop offset="1" stop-color="#3dff8b" stop-opacity=".55"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="42" fill="#0b130e" stroke="#3dff8b" stroke-width="4.5" filter="url(#glow)"/>
+  <circle cx="64" cy="64" r="24" fill="none" stroke="#3dff8b" stroke-opacity=".35" stroke-width="2.5"/>
+  <path d="M64 64 L64 22 A42 42 0 0 1 100.4 43 Z" fill="url(#sweep)"/>
+  <path d="M64 64 L100.4 43" stroke="#3dff8b" stroke-width="3.5" stroke-linecap="round" filter="url(#glow)"/>
+  <circle cx="82" cy="82" r="5" fill="#3dff8b" filter="url(#glow)"/>
+  <circle cx="64" cy="64" r="3" fill="#3dff8b"/>
+</svg>

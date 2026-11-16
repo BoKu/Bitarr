@@ -198,7 +198,7 @@ namespace
     {
         QStringList result;
         // Because we're passing a string list to the currently running
-        // qBittorrent process, we need some way of passing along the options
+        // Bitarr process, we need some way of passing along the options
         // the user has specified. Here we place special strings that are
         // almost certainly not going to collide with a file path or URL
         // specified by the user, and placing them at the beginning of the
@@ -317,8 +317,8 @@ Application::Application(int &argc, char **argv)
     qRegisterMetaType<Log::Msg>("Log::Msg");
     qRegisterMetaType<Log::Peer>("Log::Peer");
 
-    setApplicationName(u"qBittorrent"_s);
-    setOrganizationDomain(u"qbittorrent.org"_s);
+    setApplicationName(u"Bitarr"_s);
+    setOrganizationDomain(u"io.github.boku"_s);
 #if !defined(DISABLE_GUI)
     setDesktopFileName(u"org.qbittorrent.qBittorrent"_s);
     setQuitOnLastWindowClosed(false);
@@ -362,7 +362,7 @@ Application::Application(int &argc, char **argv)
     connect(this, &QGuiApplication::commitDataRequest, this, &Application::shutdownCleanup, Qt::DirectConnection);
 #endif
 
-    LogMsg(tr("qBittorrent %1 started. Process ID: %2", "qBittorrent v3.2.0alpha started")
+    LogMsg(tr("Bitarr %1 started. Process ID: %2", "Bitarr v3.2.0alpha started")
         .arg(QStringLiteral(QBT_VERSION), QString::number(QCoreApplication::applicationPid())));
     if (portableModeEnabled)
     {
@@ -751,7 +751,7 @@ void Application::sendNotificationEmail(const BitTorrent::Torrent *torrent)
         + tr("Save path: %1").arg(torrent->savePath().toString()) + u"\n\n"
         + tr("The torrent was downloaded in %1.", "The torrent was downloaded in 1 hour and 20 seconds")
             .arg(Utils::Misc::userFriendlyDuration(torrent->activeTime())) + u"\n\n\n"
-        + tr("Thank you for using qBittorrent.") + u'\n';
+        + tr("Thank you for using Bitarr.") + u'\n';
 
     // Send the notification email
     const Preferences *pref = Preferences::instance();
@@ -766,7 +766,7 @@ void Application::sendTestEmail()
     {
         // Prepare mail content
         const QString content = tr("This is a test email.") + u'\n'
-            + tr("Thank you for using qBittorrent.") + u'\n';
+            + tr("Thank you for using Bitarr.") + u'\n';
 
         // Send the notification email
         Net::SMTPClient::sendMail(pref->getMailNotificationSender(), pref->getMailNotificationEmail()
@@ -1037,7 +1037,7 @@ int Application::exec()
             const QString url = u"%1://%2:%3"_s.arg((m_webui->isHttps() ? u"https"_s : u"http"_s)
                     , (address.isEqual(QHostAddress::Any, QHostAddress::ConvertUnspecifiedAddress) ? u"localhost"_s : address.toString())
                     , QString::number(m_webui->port()));
-            printf("%s\n", qUtf8Printable(tr("To control qBittorrent, access the WebUI at: %1").arg(url)));
+            printf("%s\n", qUtf8Printable(tr("To control Bitarr, access the WebUI at: %1").arg(url)));
 
             if (!tempPassword.isEmpty())
             {
@@ -1403,11 +1403,11 @@ bool Application::loadTranslation(const QString &locale)
     const bool success = m_translator.load(u":/lang/qbittorrent_" + locale);
     if (success)
     {
-        LogMsg(tr("Load qBittorrent translation successful. Locale: %1.").arg(locale));
+        LogMsg(tr("Load Bitarr translation successful. Locale: %1.").arg(locale));
     }
     else
     {
-        LogMsg(tr("Load qBittorrent translation failed. Temporarily falling back to English. Locale not found: %1.")
+        LogMsg(tr("Load Bitarr translation failed. Temporarily falling back to English. Locale not found: %1.")
             .arg(locale), Log::WARNING);
     }
 
@@ -1425,13 +1425,13 @@ void Application::cleanup()
     if (m_isCleanupRun.exchange(true, std::memory_order_acquire))
         return;
 
-    LogMsg(tr("qBittorrent termination initiated"));
+    LogMsg(tr("Bitarr termination initiated"));
 
 #ifndef DISABLE_GUI
     if (m_desktopIntegration)
     {
         m_desktopIntegration->disconnect();
-        m_desktopIntegration->setToolTip(tr("qBittorrent is shutting down..."));
+        m_desktopIntegration->setToolTip(tr("Bitarr is shutting down..."));
         if (m_desktopIntegration->menu())
             m_desktopIntegration->menu()->setEnabled(false);
     }
@@ -1500,7 +1500,7 @@ void Application::cleanup()
     SearchPluginManager::freeInstance();
     Utils::Fs::removeDirRecursively(Utils::Fs::tempPath());
 
-    LogMsg(tr("qBittorrent is now ready to exit"));
+    LogMsg(tr("Bitarr is now ready to exit"));
     Logger::freeInstance();
     delete m_fileLogger;
 

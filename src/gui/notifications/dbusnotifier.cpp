@@ -78,7 +78,7 @@ void DBusNotifier::showMessage(const QString &title, const QString &message, con
 
 void DBusNotifier::onActionInvoked(const uint messageID, [[maybe_unused]] const QString &action)
 {
-    // Check whether the notification is sent by qBittorrent
+    // Check whether the notification is sent by Bitarr
     // to avoid reacting to unrelated notifications
     if (m_activeMessages.contains(messageID))
         emit messageClicked();

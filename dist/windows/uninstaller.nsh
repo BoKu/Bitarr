@@ -15,16 +15,16 @@ SectionEnd
 Section "un.$(remove_shortcuts)" ;"un.Remove shortcuts"
     SectionIn RO
     ; Remove shortcuts, if any
-    RMDir /r "$SMPROGRAMS\qBittorrent"
+    RMDir /r "$SMPROGRAMS\Bitarr"
     Delete "$DESKTOP\qBittorrent.lnk"
 SectionEnd
 
 Section "un.$(remove_registry)" ;"un.Remove registry keys"
     SectionIn RO
     ; Remove registry keys
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\qBittorrent"
-    DeleteRegKey HKLM "Software\qBittorrent"
-    DeleteRegValue HKLM "Software\RegisteredApplications" "qBittorrent"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Bitarr"
+    DeleteRegKey HKLM "Software\Bitarr"
+    DeleteRegValue HKLM "Software\RegisteredApplications" "Bitarr"
     ; Remove ProgIDs
     DeleteRegKey HKLM "Software\Classes\qBittorrent.File.Torrent"
     DeleteRegKey HKLM "Software\Classes\qBittorrent.Url.Magnet"
@@ -42,7 +42,7 @@ SectionEnd
 
 Function un.remove_conf_user
     System::Call 'shell32::SHGetKnownFolderPath(g "${FOLDERID_RoamingAppData}", i 0, p 0, *w . r1) i . r0'
-    RMDir /r "$1\qBittorrent"
+    RMDir /r "$1\Bitarr"
     System::Call 'ole32::CoTaskMemFree(p r1)'
 FunctionEnd
 
@@ -52,7 +52,7 @@ SectionEnd
 
 Function un.remove_cache_user
     System::Call 'shell32::SHGetKnownFolderPath(g "${FOLDERID_LocalAppData}", i 0, p 0, *w . r1) i . r0'
-    RMDir /r "$1\qBittorrent"
+    RMDir /r "$1\Bitarr"
     System::Call 'ole32::CoTaskMemFree(p r1)'
 FunctionEnd
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR) # Policies <= CMP0097 default t
 
 project(qBittorrent
     DESCRIPTION "The qBittorrent BitTorrent client"
-    HOMEPAGE_URL "https://www.qbittorrent.org/"
+    HOMEPAGE_URL "https://github.com/BoKu/Bitarr"
     LANGUAGES CXX
 )
 

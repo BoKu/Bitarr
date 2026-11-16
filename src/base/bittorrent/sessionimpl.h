@@ -201,6 +201,12 @@ namespace BitTorrent
         void setAddTorrentToQueueTop(bool value) override;
         bool isAddTorrentStopped() const override;
         void setAddTorrentStopped(bool value) override;
+        bool isAlwaysSequentialDownload() const override;
+        void setAlwaysSequentialDownload(bool value) override;
+        bool isAlwaysFirstLastPiecePriority() const override;
+        void setAlwaysFirstLastPiecePriority(bool value) override;
+        bool isNeverDownloadNfoFiles() const override;
+        void setNeverDownloadNfoFiles(bool value) override;
         Torrent::StopCondition torrentStopCondition() const override;
         void setTorrentStopCondition(Torrent::StopCondition stopCondition) override;
         TorrentContentLayout torrentContentLayout() const override;
@@ -752,6 +758,9 @@ namespace BitTorrent
         CachedSettingValue<int> m_globalMaxInactiveSeedingMinutes;
         CachedSettingValue<bool> m_isAddTorrentToQueueTop;
         CachedSettingValue<bool> m_isAddTorrentStopped;
+        CachedSettingValue<bool> m_isAlwaysSequentialDownload;
+        CachedSettingValue<bool> m_isAlwaysFirstLastPiecePriority;
+        CachedSettingValue<bool> m_isNeverDownloadNfoFiles;
         CachedSettingValue<Torrent::StopCondition> m_torrentStopCondition;
         CachedSettingValue<TorrentContentLayout> m_torrentContentLayout;
         CachedSettingValue<bool> m_isAppendExtensionEnabled;

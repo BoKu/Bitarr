@@ -85,7 +85,7 @@ const QString INDEX_HTML = u"/index.html"_s;
 
 const QString BASIC_AUTH = u"Basic"_s;
 const QString BEARER_AUTH = u"Bearer"_s;
-const QString BEARER_AUTH_CHALLENGE = u"Bearer realm=\"qBittorrent\", error=\"invalid_token\""_s;
+const QString BEARER_AUTH_CHALLENGE = u"Bearer realm=\"Bitarr\", error=\"invalid_token\""_s;
 
 const QString API_PATH = u"/api/v2/"_s;
 

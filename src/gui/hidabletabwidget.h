@@ -28,7 +28,10 @@
 
 #pragma once
 
+#include <QPointer>
 #include <QTabWidget>
+
+class QResizeEvent;
 
 #ifdef Q_OS_MACOS
 class QPaintEvent;
@@ -39,10 +42,19 @@ class HidableTabWidget final : public QTabWidget
 public:
     explicit HidableTabWidget(QWidget *parent = nullptr);
 
+    // Places `widget` in the navigation column, directly below the page entries.
+    // It is only shown while `page` is the current page.
+    void setSidebarWidget(QWidget *widget, QWidget *page);
+
 private:
     void tabInserted(int index) override;
     void tabRemoved(int index) override;
+    void resizeEvent(QResizeEvent *event) override;
     void tabsCountChanged();
+    void updateSidebar();
+
+    QPointer<QWidget> m_sidebar;
+    QPointer<QWidget> m_sidebarPage;
 
 #ifdef Q_OS_MACOS
     void paintEvent(QPaintEvent *event) override;

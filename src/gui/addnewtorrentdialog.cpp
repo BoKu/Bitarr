@@ -235,6 +235,7 @@ AddNewTorrentDialog::AddNewTorrentDialog(const BitTorrent::TorrentDescriptor &to
     connect(m_ui->savePath, &FileSystemPathEdit::selectedPathChanged, this, &AddNewTorrentDialog::onSavePathChanged);
     connect(m_ui->downloadPath, &FileSystemPathEdit::selectedPathChanged, this, &AddNewTorrentDialog::onDownloadPathChanged);
     connect(m_ui->groupBoxDownloadPath, &QGroupBox::toggled, this, &AddNewTorrentDialog::onUseDownloadPathChanged);
+    connect(m_ui->excludeNfoCheckBox, &QCheckBox::toggled, this, &AddNewTorrentDialog::applyNfoExclusion);
     connect(m_ui->comboTMM, &QComboBox::currentIndexChanged, this, &AddNewTorrentDialog::TMMChanged);
     connect(m_ui->startTorrentCheckBox, &QCheckBox::toggled, this, [this](const bool checked)
     {
@@ -334,8 +335,12 @@ void AddNewTorrentDialog::setCurrentContext(const std::shared_ptr<Context> conte
     m_ui->stopConditionComboBox->setEnabled(m_ui->startTorrentCheckBox->isChecked());
     m_ui->contentLayoutComboBox->setCurrentIndex(
             static_cast<int>(addTorrentParams.contentLayout.value_or(session->torrentContentLayout())));
-    m_ui->sequentialCheckBox->setChecked(addTorrentParams.sequential);
-    m_ui->firstLastCheckBox->setChecked(addTorrentParams.firstLastPiecePriority);
+    m_ui->sequentialCheckBox->setChecked(addTorrentParams.sequential || session->isAlwaysSequentialDownload());
+    m_ui->sequentialCheckBox->setEnabled(!session->isAlwaysSequentialDownload());
+    m_ui->firstLastCheckBox->setChecked(addTorrentParams.firstLastPiecePriority || session->isAlwaysFirstLastPiecePriority());
+    m_ui->firstLastCheckBox->setEnabled(!session->isAlwaysFirstLastPiecePriority());
+    m_ui->excludeNfoCheckBox->setChecked(addTorrentParams.excludeNfoFiles || session->isNeverDownloadNfoFiles());
+    m_ui->excludeNfoCheckBox->setEnabled(!session->isNeverDownloadNfoFiles());
     m_ui->seedModeCheckBox->setChecked(addTorrentParams.seedMode);
     m_ui->tagsLineEdit->setText(Utils::String::joinIntoString(addTorrentParams.tags, u", "_s));
 
@@ -434,6 +439,7 @@ void AddNewTorrentDialog::updateCurrentContext()
 
     addTorrentParams.sequential = m_ui->sequentialCheckBox->isChecked();
     addTorrentParams.firstLastPiecePriority = m_ui->firstLastCheckBox->isChecked();
+    addTorrentParams.excludeNfoFiles = m_ui->excludeNfoCheckBox->isChecked();
 
     const bool useAutoTMM = (m_ui->comboTMM->currentIndex() == 1); // 1 is Automatic mode. Handle all non 1 values as manual mode.
     addTorrentParams.useAutoTMM = useAutoTMM;
@@ -548,6 +554,30 @@ void AddNewTorrentDialog::contentLayoutChanged()
 
     const auto contentLayout = static_cast<BitTorrent::TorrentContentLayout>(m_ui->contentLayoutComboBox->currentIndex());
     m_contentAdaptor->applyContentLayout(contentLayout);
+}
+
+void AddNewTorrentDialog::applyNfoExclusion(const bool exclude)
+{
+    // Magnet links have no file list until their metadata arrives; setupTreeview() applies the choice then.
+    if (!m_contentAdaptor)
+        return;
+
+    const PathList paths = m_contentAdaptor->filePaths();
+    QList<BitTorrent::DownloadPriority> priorities = m_contentAdaptor->filePriorities();
+    priorities.resize(paths.size(), BitTorrent::DownloadPriority::Normal);
+    for (qsizetype i = 0; i < paths.size(); ++i)
+    {
+        if (!BitTorrent::isNfoFile(paths.at(i)))
+            continue;
+
+        if (exclude)
+            priorities[i] = BitTorrent::DownloadPriority::Ignored;
+        else if (priorities[i] == BitTorrent::DownloadPriority::Ignored)
+            priorities[i] = BitTorrent::DownloadPriority::Normal;
+    }
+
+    m_contentAdaptor->prioritizeFiles(priorities);
+    m_ui->contentTreeView->setContentHandler(m_contentAdaptor.get()); // refresh the file list
 }
 
 void AddNewTorrentDialog::saveTorrentFile()
@@ -814,7 +844,7 @@ void AddNewTorrentDialog::setupTreeview()
         lt::add_torrent_params p = torrentDescr.ltAddTorrentParams();
         if (p.file_priorities.empty())
         {
-            // Use qBittorrent default priority rather than libtorrent's (4)
+            // Use Bitarr default priority rather than libtorrent's (4)
             addTorrentParams.filePriorities.resize(torrentInfo.filesCount(), BitTorrent::DownloadPriority::Normal);
         }
         else
@@ -843,6 +873,9 @@ void AddNewTorrentDialog::setupTreeview()
         BitTorrent::Session::instance()->applyFilenameFilter(m_contentAdaptor->filePaths(), priorities);
         m_contentAdaptor->prioritizeFiles(priorities);
     }
+
+    if (m_ui->excludeNfoCheckBox->isChecked())
+        applyNfoExclusion(true);
 
     m_ui->contentTreeView->setContentHandler(m_contentAdaptor.get());
 

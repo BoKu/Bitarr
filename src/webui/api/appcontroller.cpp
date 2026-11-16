@@ -177,6 +177,9 @@ void AppController::preferencesAction()
     data[u"torrent_content_layout"_s] = Utils::String::fromEnum(session->torrentContentLayout());
     data[u"add_to_top_of_queue"_s] = session->isAddTorrentToQueueTop();
     data[u"add_stopped_enabled"_s] = session->isAddTorrentStopped();
+    data[u"always_sequential_download"_s] = session->isAlwaysSequentialDownload();
+    data[u"always_first_last_pieces"_s] = session->isAlwaysFirstLastPiecePriority();
+    data[u"never_download_nfo_files"_s] = session->isNeverDownloadNfoFiles();
     data[u"torrent_stop_condition"_s] = Utils::String::fromEnum(session->torrentStopCondition());
     data[u"merge_trackers"_s] = session->isMergeTrackersEnabled();
     data[u"auto_delete_mode"_s] = static_cast<int>(TorrentFileGuard::autoDeleteMode());
@@ -608,6 +611,12 @@ void AppController::setPreferencesAction()
         session->setAddTorrentToQueueTop(it.value().toBool());
     if (hasKey(u"add_stopped_enabled"_s))
         session->setAddTorrentStopped(it.value().toBool());
+    if (hasKey(u"always_sequential_download"_s))
+        session->setAlwaysSequentialDownload(it.value().toBool());
+    if (hasKey(u"always_first_last_pieces"_s))
+        session->setAlwaysFirstLastPiecePriority(it.value().toBool());
+    if (hasKey(u"never_download_nfo_files"_s))
+        session->setNeverDownloadNfoFiles(it.value().toBool());
     if (hasKey(u"torrent_stop_condition"_s))
         session->setTorrentStopCondition(Utils::String::toEnum(it.value().toString(), BitTorrent::Torrent::StopCondition::None));
     if (hasKey(u"merge_trackers"_s))
@@ -1037,7 +1046,7 @@ void AppController::setPreferencesAction()
         RSS::AutoDownloader::instance()->setSmartEpisodeFilters(it.value().toString().split(u'\n'));
 
     // Advanced settings
-    // qBittorrent preferences
+    // Bitarr preferences
     // Resume data storage type
     if (hasKey(u"resume_data_storage_type"_s))
         session->setResumeDataStorageType(Utils::String::toEnum(it.value().toString(), BitTorrent::ResumeDataStorageType::Legacy));

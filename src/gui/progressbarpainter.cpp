@@ -63,7 +63,7 @@ void ProgressBarPainter::paint(QPainter *painter, const QStyleOptionViewItem &op
     styleOption.minimum = 0;
     styleOption.progress = progress;
     styleOption.text = text;
-    styleOption.textVisible = true;
+    styleOption.textVisible = false; // the label is drawn below so it stays readable on both the filled and empty parts
     // QStyleOption fields
     styleOption.rect = option.rect.adjusted(0, 1, 0, -1);
     // Qt 6 requires QStyle::State_Horizontal to be set for correctly drawing horizontal progress bar
@@ -85,6 +85,20 @@ void ProgressBarPainter::paint(QPainter *painter, const QStyleOptionViewItem &op
     const QStyle *style = m_dummyProgressBar.style();
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, option.widget);
     style->drawControl(QStyle::CE_ProgressBar, &styleOption, painter, &m_dummyProgressBar);
+
+    // Two-tone label: highlighted-text colour over the filled part, normal text colour over the rest
+    const QRect barRect = styleOption.rect;
+    const int filledWidth = barRect.width() * qBound(0, progress, 100) / 100;
+    const QRect filledRect {barRect.left(), barRect.top(), filledWidth, barRect.height()};
+    const QRect emptyRect {barRect.left() + filledWidth, barRect.top(), barRect.width() - filledWidth, barRect.height()};
+    painter->setFont(option.font);
+    painter->setPen(styleOption.palette.color(QPalette::HighlightedText));
+    painter->setClipRect(filledRect, Qt::IntersectClip);
+    painter->drawText(barRect, Qt::AlignCenter, text);
+    painter->setClipRect(barRect, Qt::ReplaceClip);
+    painter->setPen(styleOption.palette.color(QPalette::Text));
+    painter->setClipRect(emptyRect, Qt::IntersectClip);
+    painter->drawText(barRect, Qt::AlignCenter, text);
     painter->restore();
 }
 
