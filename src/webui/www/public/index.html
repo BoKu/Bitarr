@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <meta name="description" content="Bitarr WebUI">
+    <title>Bitarr - Log in</title>
+    <link rel="icon" type="image/svg+xml" href="images/bitarr.svg">
+    <link rel="stylesheet" href="css/login.css?v=${CACHEID}">
+    <script defer src="js/login.js?v=${CACHEID}"></script>
+</head>
+
+<body>
+    <noscript><p class="error">JavaScript is required for the Bitarr WebUI.</p></noscript>
+    <main class="card">
+        <img src="images/bitarr.svg" alt="Bitarr logo" class="logo">
+        <h1>Bitarr</h1>
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="username" autocapitalize="none" autofocus required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <button type="submit" id="loginButton">Log in</button>
+            <p id="error" class="error" role="alert"></p>
+        </form>
+    </main>
+</body>
+
+</html>
